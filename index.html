@@ -59,35 +59,65 @@
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
+
+        /* ========== TOOL CARD (CENTERED CONTENT) ========== */
         .tool-card {
             background: var(--card-bg);
             border-radius: 16px;
-            padding: 24px 22px;
+            padding: 28px 22px;
             border: 1px solid var(--border-color);
             box-shadow: 0 1px 3px var(--shadow-color);
             transition: all 0.25s ease;
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 12px;
             position: relative;
+            min-height: 180px;
         }
         .tool-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
             border-color: var(--secondary-blue);
         }
+
         .tool-card .card-icon {
-            width: 48px; height: 48px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 22px; margin-bottom: 4px;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
         }
-        .tool-card h3 { font-size: 16px; font-weight: 700; }
-        .tool-card p { font-size: 13px; color: var(--text-light); line-height: 1.5; flex: 1; }
+
+        .tool-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-color);
+        }
+
+        .tool-card .card-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.5;
+            display: none;
+        }
+
         .tool-card .badge {
-            position: absolute; top: 16px; right: 16px;
-            font-size: 10px; font-weight: 700; padding: 3px 10px;
-            border-radius: 20px; text-transform: uppercase;
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
         }
         .badge.free { background: #ecfdf5; color: #10b981; }
         .badge.pro { background: #f5f3ff; color: #8b5cf6; }
@@ -273,10 +303,10 @@
 
         @media (max-width: 768px) {
             .home-container { padding: 24px 16px; }
-            .tools-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
-            .tool-card { padding: 18px 16px; }
-            .tool-card h3 { font-size: 14px; }
-            .tool-card p { font-size: 12px; }
+            .tools-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+            .tool-card { padding: 20px 14px; min-height: 150px; gap: 10px; }
+            .tool-card .card-icon { width: 48px; height: 48px; font-size: 22px; }
+            .tool-card h3 { font-size: 13px; }
             .tool-panel { padding: 24px 20px; }
             .tool-page-header { padding: 12px 16px; }
             .tool-page-header h2 { font-size: 16px; }
@@ -297,7 +327,7 @@
     </div>
 </div>
 
-<!-- ================= TOOL VIEW (dynamic) ================= -->
+<!-- ================= TOOL VIEW ================= -->
 <div class="view" id="toolView">
     <div class="tool-page">
         <div class="tool-page-header">
@@ -316,71 +346,71 @@
 // ============================================================
 const TOOLS = [
     { id: 'merge-pdf', name: 'Merge PDF', icon: 'fa-object-group', iconClass: 'icon-red', badge: null,
-      desc: 'Combine PDFs in the order you want with the easiest PDF merger available.' },
+      desc: 'Combine PDFs in the order you want.' },
     { id: 'split-pdf', name: 'Split PDF', icon: 'fa-cut', iconClass: 'icon-orange', badge: null,
-      desc: 'Separate one page or a whole set for easy conversion into independent PDF files.' },
+      desc: 'Separate one page or a whole set.' },
     { id: 'compress-pdf', name: 'Compress PDF', icon: 'fa-compress-alt', iconClass: 'icon-green', badge: null,
-      desc: 'Reduce file size while optimizing for maximal PDF quality.' },
+      desc: 'Reduce file size while optimizing quality.' },
     { id: 'pdf-to-word', name: 'PDF to Word', icon: 'fa-file-word', iconClass: 'icon-blue', badge: null,
-      desc: 'Easily convert your PDF files into easy to edit DOC and DOCX documents.' },
+      desc: 'Convert PDF to editable DOC/DOCX.' },
     { id: 'pdf-to-ppt', name: 'PDF to PowerPoint', icon: 'fa-file-powerpoint', iconClass: 'icon-red', badge: null,
-      desc: 'Turn your PDF files into easy to edit PPT and PPTX slideshows.' },
+      desc: 'Turn PDF into editable PPT slideshows.' },
     { id: 'pdf-to-excel', name: 'PDF to Excel', icon: 'fa-file-excel', iconClass: 'icon-green', badge: null,
-      desc: 'Pull data straight from PDFs into Excel spreadsheets in a few short seconds.' },
+      desc: 'Pull data from PDF into Excel sheets.' },
     { id: 'word-to-pdf', name: 'Word to PDF', icon: 'fa-file-word', iconClass: 'icon-blue', badge: null,
-      desc: 'Make DOC and DOCX files easy to read by converting them to PDF.' },
+      desc: 'Make DOC/DOCX easy to read as PDF.' },
     { id: 'ppt-to-pdf', name: 'PowerPoint to PDF', icon: 'fa-file-powerpoint', iconClass: 'icon-red', badge: null,
-      desc: 'Make PPT and PPTX slideshows easy to view by converting them to PDF.' },
+      desc: 'Make PPT/PPTX easy to view as PDF.' },
     { id: 'excel-to-pdf', name: 'Excel to PDF', icon: 'fa-file-excel', iconClass: 'icon-green', badge: null,
-      desc: 'Make EXCEL spreadsheets easy to read by converting them to PDF.' },
+      desc: 'Make EXCEL spreadsheets easy to read.' },
     { id: 'edit-pdf', name: 'Edit PDF', icon: 'fa-edit', iconClass: 'icon-purple', badge: null,
-      desc: 'Add text, images, shapes or freehand annotations to a PDF document.' },
+      desc: 'Add text, images, shapes, annotations.' },
     { id: 'pdf-to-jpg', name: 'PDF to JPG', icon: 'fa-file-image', iconClass: 'icon-yellow', badge: null,
-      desc: 'Convert each PDF page into a JPG or extract all images contained in a PDF.' },
+      desc: 'Convert each page to JPG or extract images.' },
     { id: 'jpg-to-pdf', name: 'JPG to PDF', icon: 'fa-file-image', iconClass: 'icon-yellow', badge: null,
-      desc: 'Convert JPG images to PDF in seconds. Easily adjust orientation and margins.' },
+      desc: 'Convert JPG images to PDF in seconds.' },
     { id: 'sign-pdf', name: 'Sign PDF', icon: 'fa-signature', iconClass: 'icon-blue', badge: null,
-      desc: 'Sign yourself or request electronic signatures from others.' },
+      desc: 'Sign yourself or request signatures.' },
     { id: 'watermark-pdf', name: 'Watermark', icon: 'fa-tint', iconClass: 'icon-purple', badge: null,
-      desc: 'Stamp an image or text over your PDF in seconds.' },
+      desc: 'Stamp an image or text over your PDF.' },
     { id: 'rotate-pdf', name: 'Rotate PDF', icon: 'fa-sync-alt', iconClass: 'icon-purple', badge: null,
-      desc: 'Rotate your PDFs the way you need them. You can even rotate multiple PDFs at once!' },
+      desc: 'Rotate your PDFs the way you need them.' },
     { id: 'html-to-pdf', name: 'HTML to PDF', icon: 'fa-code', iconClass: 'icon-yellow', badge: null,
-      desc: 'Convert webpages in HTML to PDF. Copy and paste the URL of the page you want.' },
+      desc: 'Convert webpages in HTML to PDF.' },
     { id: 'unlock-pdf', name: 'Unlock PDF', icon: 'fa-unlock', iconClass: 'icon-blue', badge: null,
-      desc: 'Remove PDF password security, giving you the freedom to use your PDFs as you want.' },
+      desc: 'Remove PDF password security.' },
     { id: 'protect-pdf', name: 'Protect PDF', icon: 'fa-lock', iconClass: 'icon-blue', badge: null,
-      desc: 'Protect PDF files with a password. Encrypt PDF documents to prevent unauthorized access.' },
+      desc: 'Protect PDF files with a password.' },
     { id: 'organize-pdf', name: 'Organize PDF', icon: 'fa-sitemap', iconClass: 'icon-red', badge: null,
-      desc: 'Sort, delete and add PDF pages however you like.' },
+      desc: 'Sort, delete and add PDF pages.' },
     { id: 'pdf-to-pdfa', name: 'PDF to PDF/A', icon: 'fa-file-pdf', iconClass: 'icon-blue', badge: null,
-      desc: 'Transform your PDF to PDF/A, the ISO-standardized version of PDF for long-term archiving.' },
+      desc: 'Transform PDF to ISO-standard PDF/A.' },
     { id: 'repair-pdf', name: 'Repair PDF', icon: 'fa-wrench', iconClass: 'icon-green', badge: null,
-      desc: 'Repair a damaged PDF and recover data from corrupt PDF.' },
+      desc: 'Repair damaged PDF and recover data.' },
     { id: 'add-page-numbers', name: 'Page numbers', icon: 'fa-list-ol', iconClass: 'icon-purple', badge: null,
-      desc: 'Add page numbers into PDFs with ease. Choose your positions, dimensions, typography.' },
+      desc: 'Add page numbers into PDFs with ease.' },
     { id: 'scan-to-pdf', name: 'Scan to PDF', icon: 'fa-camera', iconClass: 'icon-red', badge: null,
-      desc: 'Capture document scans from your mobile device and send them instantly to your browser.' },
+      desc: 'Capture document scans from your device.' },
     { id: 'ocr-pdf', name: 'OCR PDF', icon: 'fa-eye', iconClass: 'icon-green', badge: null,
-      desc: 'Easily convert scanned PDF into searchable and selectable documents.' },
+      desc: 'Convert scanned PDF into searchable text.' },
     { id: 'compare-pdf', name: 'Compare PDF', icon: 'fa-columns', iconClass: 'icon-blue', badge: null,
-      desc: 'Show a side-by-side document comparison and easily spot changes between different file versions.' },
+      desc: 'Side-by-side comparison of PDF versions.' },
     { id: 'redact-pdf', name: 'Redact PDF', icon: 'fa-eraser', iconClass: 'icon-red', badge: null,
-      desc: 'Redact text and graphics to permanently remove sensitive information from a PDF.' },
+      desc: 'Remove sensitive information permanently.' },
     { id: 'crop-pdf', name: 'Crop PDF', icon: 'fa-crop-alt', iconClass: 'icon-purple', badge: null,
-      desc: 'Crop margins of PDF documents or select specific areas, then apply the changes.' },
+      desc: 'Crop margins or select specific areas.' },
     { id: 'pdf-forms', name: 'PDF Forms', icon: 'fa-wpforms', iconClass: 'icon-indigo', badge: 'New',
-      desc: 'Detect form fields automatically, create interactive fillable PDFs, or fill PDF forms yourself.' },
+      desc: 'Detect form fields, create fillable PDFs.' },
     { id: 'ai-summarizer', name: 'AI Summarizer', icon: 'fa-robot', iconClass: 'icon-purple', badge: 'New',
-      desc: 'Quickly generate concise summaries from articles, paragraphs, and essays.' },
+      desc: 'Generate concise summaries from text.' },
     { id: 'translate-pdf', name: 'Translate PDF', icon: 'fa-language', iconClass: 'icon-purple', badge: 'New',
-      desc: 'Easily translate PDF files powered by AI. Keep fonts, layout, and formatting intact.' },
+      desc: 'Translate PDF files powered by AI.' },
     { id: 'pdf-to-markdown', name: 'PDF to Markdown', icon: 'fa-markdown', iconClass: 'icon-purple', badge: 'New',
-      desc: 'Easily turn PDFs into Markdown files. Perfect for notes, docs, and LLMs.' }
+      desc: 'Turn PDFs into Markdown files.' }
 ];
 
 // ============================================================
-// RENDER HOME GRID
+// RENDER HOME GRID (CENTERED)
 // ============================================================
 function renderHome() {
     const grid = document.getElementById('toolsGrid');
@@ -391,7 +421,6 @@ function renderHome() {
                 ${badgeHtml}
                 <div class="card-icon ${tool.iconClass}"><i class="fas ${tool.icon}"></i></div>
                 <h3>${tool.name}</h3>
-                <p>${tool.desc}</p>
             </div>
         `;
     }).join('');
@@ -408,7 +437,6 @@ function openTool(toolId) {
     document.getElementById('homeView').classList.remove('active');
     document.getElementById('toolView').classList.add('active');
     window.scrollTo(0, 0);
-    // Re-bind any dynamic elements
     if (toolId === 'watermark-pdf') {
         const slider = document.getElementById('wmOpacity');
         if (slider) slider.addEventListener('input', e => document.getElementById('wmOpacityVal').textContent = e.target.value);
@@ -426,7 +454,6 @@ function goHome() {
 // ============================================================
 function getToolHTML(id) {
     const map = {
-        // ---------- MERGE ----------
         'merge-pdf': `
             <div class="form-group"><label>Upload PDF files (multiple, in order)</label>
             <div class="upload-area" onclick="document.getElementById('mergeInput').click()">
@@ -437,7 +464,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="mergePdfs()"><i class="fas fa-object-group"></i> Merge PDFs</button>
             <button class="btn-danger" onclick="clearMerge()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- SPLIT ----------
         'split-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('splitInput').click()">
@@ -454,7 +480,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="splitPdf()"><i class="fas fa-cut"></i> Split PDF</button>
             <button class="btn-danger" onclick="clearSplit()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- COMPRESS ----------
         'compress-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('compressInput').click()">
@@ -467,7 +492,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="compressPdf()"><i class="fas fa-compress-alt"></i> Compress PDF</button>
             <button class="btn-danger" onclick="clearCompress()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PDF TO WORD ----------
         'pdf-to-word': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('pdfWordInput').click()">
@@ -478,7 +502,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertPdfToWord()"><i class="fas fa-file-word"></i> Convert to Word</button>
             <button class="btn-danger" onclick="clearPdfWord()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PDF TO PPT ----------
         'pdf-to-ppt': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('pdfPptInput').click()">
@@ -489,7 +512,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertPdfToPpt()"><i class="fas fa-file-powerpoint"></i> Convert to PPT</button>
             <button class="btn-danger" onclick="clearPdfPpt()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PDF TO EXCEL ----------
         'pdf-to-excel': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('pdfExcelInput').click()">
@@ -500,7 +522,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertPdfToExcel()"><i class="fas fa-file-excel"></i> Convert to Excel</button>
             <button class="btn-danger" onclick="clearPdfExcel()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- WORD TO PDF ----------
         'word-to-pdf': `
             <div class="form-group"><label>Upload Word file (.doc, .docx)</label>
             <div class="upload-area" onclick="document.getElementById('wordPdfInput').click()">
@@ -510,7 +531,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertWordToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
             <button class="btn-danger" onclick="clearWordPdf()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PPT TO PDF ----------
         'ppt-to-pdf': `
             <div class="form-group"><label>Upload PPT file (.ppt, .pptx)</label>
             <div class="upload-area" onclick="document.getElementById('pptPdfInput').click()">
@@ -520,7 +540,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertPptToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
             <button class="btn-danger" onclick="clearPptPdf()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- EXCEL TO PDF ----------
         'excel-to-pdf': `
             <div class="form-group"><label>Upload Excel file (.xls, .xlsx)</label>
             <div class="upload-area" onclick="document.getElementById('excelPdfInput').click()">
@@ -530,7 +549,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertExcelToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
             <button class="btn-danger" onclick="clearExcelPdf()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- EDIT PDF ----------
         'edit-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('editInput').click()">
@@ -542,7 +560,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="editPdfAddText()"><i class="fas fa-edit"></i> Apply Edit</button>
             <button class="btn-danger" onclick="clearEdit()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PDF TO JPG ----------
         'pdf-to-jpg': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('pdfJpgInput').click()">
@@ -553,7 +570,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertPdfToJpg()"><i class="fas fa-images"></i> Convert to JPG</button>
             <button class="btn-danger" onclick="clearPdfJpg()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- JPG TO PDF ----------
         'jpg-to-pdf': `
             <div class="form-group"><label>Upload images (JPG, PNG, WEBP)</label>
             <div class="upload-area" onclick="document.getElementById('jpgPdfInput').click()">
@@ -564,7 +580,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertJpgToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
             <button class="btn-danger" onclick="clearJpgPdf()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- SIGN PDF ----------
         'sign-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('signInput').click()">
@@ -576,7 +591,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="signPdf()"><i class="fas fa-signature"></i> Add Signature</button>
             <button class="btn-danger" onclick="clearSign()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- WATERMARK ----------
         'watermark-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('watermarkInput').click()">
@@ -591,7 +605,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="addWatermark()"><i class="fas fa-tint"></i> Add Watermark</button>
             <button class="btn-danger" onclick="clearWatermark()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- ROTATE ----------
         'rotate-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('rotateInput').click()">
@@ -604,7 +617,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="rotatePdf()"><i class="fas fa-sync-alt"></i> Rotate</button>
             <button class="btn-danger" onclick="clearRotate()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- HTML TO PDF ----------
         'html-to-pdf': `
             <div class="form-group"><label>Enter webpage URL</label>
             <input type="url" id="htmlUrl" placeholder="https://example.com"></div>
@@ -612,7 +624,6 @@ function getToolHTML(id) {
             <button class="btn-danger" onclick="clearHtmlPdf()"><i class="fas fa-trash"></i> Clear</button></div>
             <div class="info-note"><i class="fas fa-info-circle"></i><span>Due to browser security, this will open the page in a new tab for printing to PDF.</span></div>
         `,
-        // ---------- UNLOCK ----------
         'unlock-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('unlockInput').click()">
@@ -624,7 +635,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="unlockPdf()"><i class="fas fa-unlock"></i> Remove Password</button>
             <button class="btn-danger" onclick="clearUnlock()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PROTECT ----------
         'protect-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('protectInput').click()">
@@ -636,7 +646,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="protectPdf()"><i class="fas fa-lock"></i> Encrypt PDF</button>
             <button class="btn-danger" onclick="clearProtect()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- ORGANIZE ----------
         'organize-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('organizeInput').click()">
@@ -648,7 +657,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="organizePdf()"><i class="fas fa-sitemap"></i> Reorder Pages</button>
             <button class="btn-danger" onclick="clearOrganize()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PDF TO PDF/A ----------
         'pdf-to-pdfa': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('pdfaInput').click()">
@@ -658,7 +666,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertToPdfa()"><i class="fas fa-file-pdf"></i> Convert to PDF/A</button>
             <button class="btn-danger" onclick="clearPdfa()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- REPAIR ----------
         'repair-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('repairInput').click()">
@@ -668,7 +675,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="repairPdf()"><i class="fas fa-wrench"></i> Attempt Repair</button>
             <button class="btn-danger" onclick="clearRepair()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PAGE NUMBERS ----------
         'add-page-numbers': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('pageNumInput').click()">
@@ -685,7 +691,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="addPageNumbers()"><i class="fas fa-list-ol"></i> Add Page Numbers</button>
             <button class="btn-danger" onclick="clearPageNum()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- SCAN ----------
         'scan-to-pdf': `
             <div class="form-group"><label>Upload image from camera or gallery</label>
             <div class="upload-area" onclick="document.getElementById('scanInput').click()">
@@ -696,7 +701,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="scanToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
             <button class="btn-danger" onclick="clearScan()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- OCR ----------
         'ocr-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('ocrInput').click()">
@@ -714,7 +718,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="runOcr()"><i class="fas fa-eye"></i> Start OCR</button>
             <button class="btn-danger" onclick="clearOcr()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- COMPARE ----------
         'compare-pdf': `
             <div class="form-group"><label>Upload first PDF</label>
             <div class="upload-area" onclick="document.getElementById('compare1Input').click()">
@@ -729,7 +732,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="comparePdfs()"><i class="fas fa-columns"></i> Compare</button>
             <button class="btn-danger" onclick="clearCompare()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- REDACT ----------
         'redact-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('redactInput').click()">
@@ -741,7 +743,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="redactPdf()"><i class="fas fa-eraser"></i> Redact</button>
             <button class="btn-danger" onclick="clearRedact()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- CROP ----------
         'crop-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('cropInput').click()">
@@ -753,7 +754,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="cropPdf()"><i class="fas fa-crop-alt"></i> Crop PDF</button>
             <button class="btn-danger" onclick="clearCrop()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- FORMS ----------
         'pdf-forms': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('formsInput').click()">
@@ -763,7 +763,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="detectForms()"><i class="fas fa-wpforms"></i> Detect Form Fields</button>
             <button class="btn-danger" onclick="clearForms()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- AI SUMMARIZER ----------
         'ai-summarizer': `
             <div class="form-group"><label>Paste text to summarize</label>
             <textarea id="summarizeText" placeholder="Paste your article, paragraph, or essay here..." style="min-height:180px;"></textarea></div>
@@ -771,7 +770,6 @@ function getToolHTML(id) {
             <button class="btn-danger" onclick="clearSummarize()"><i class="fas fa-trash"></i> Clear</button></div>
             <div id="summaryResult" class="preview-box" style="display:none;margin-top:16px;"></div>
         `,
-        // ---------- TRANSLATE ----------
         'translate-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('translateInput').click()">
@@ -787,7 +785,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="translatePdf()"><i class="fas fa-language"></i> Translate</button>
             <button class="btn-danger" onclick="clearTranslate()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        // ---------- PDF TO MARKDOWN ----------
         'pdf-to-markdown': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('markdownInput').click()">
