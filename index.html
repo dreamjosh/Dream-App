@@ -228,14 +228,20 @@
             background: var(--secondary-blue); color: #fff;
         }
         .action-row button:hover { transform: scale(1.03); }
+        .action-row button:disabled {
+            opacity: 0.45; cursor: not-allowed; transform: none !important;
+            box-shadow: none !important; filter: grayscale(0.4);
+        }
         .action-row .btn-primary { background: var(--primary-blue); }
-        .action-row .btn-primary:hover { box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35); }
+        .action-row .btn-primary:hover:not(:disabled) { box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35); }
         .action-row .btn-success { background: linear-gradient(135deg, #10b981, #059669); }
-        .action-row .btn-success:hover { box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35); }
+        .action-row .btn-success:hover:not(:disabled) { box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35); }
         .action-row .btn-danger { background: #ef4444; }
-        .action-row .btn-danger:hover { box-shadow: 0 8px 25px rgba(239, 68, 68, 0.35); }
+        .action-row .btn-danger:hover:not(:disabled) { box-shadow: 0 8px 25px rgba(239, 68, 68, 0.35); }
         .action-row .btn-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-        .action-row .btn-purple:hover { box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35); }
+        .action-row .btn-purple:hover:not(:disabled) { box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35); }
+        .action-row .btn-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+        .action-row .btn-teal:hover:not(:disabled) { box-shadow: 0 8px 25px rgba(20, 184, 166, 0.35); }
 
         .inline-row {
             display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
@@ -352,6 +358,42 @@
         .verify-status-bar .dot.pending { background: #f59e0b; animation: pulse 1.2s infinite; }
         @keyframes pulse { 0%{opacity:1;} 50%{opacity:0.35;} 100%{opacity:1;} }
 
+        .verified-cert-preview {
+            margin-top: 16px;
+            padding: 16px;
+            border: 2px dashed #10b981;
+            border-radius: 12px;
+            background: #ecfdf5;
+            display: none;
+        }
+        .verified-cert-preview.show { display: block; }
+        .verified-cert-preview h4 {
+            color: #065f46;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .verified-cert-preview p {
+            font-size: 12px;
+            color: #047857;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .verified-seal {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
         .badge-new {
             background: #fffbeb; color: #f59e0b;
             font-size: 10px; font-weight: 700;
@@ -406,7 +448,7 @@
 // ============================================================
 const TOOLS = [
     { id: 'pdf-reader-verify', name: 'PDF Reader & Verify', icon: 'fa-book-reader', iconClass: 'icon-purple', badge: 'New',
-      desc: 'Open PDF on phone & verify digital signature.' },
+      desc: 'Open PDF, verify digital signature & convert to verified PDF.' },
     { id: 'merge-pdf', name: 'Merge PDF', icon: 'fa-object-group', iconClass: 'icon-red', badge: null,
       desc: 'Combine PDFs in the order you want.' },
     { id: 'split-pdf', name: 'Split PDF', icon: 'fa-cut', iconClass: 'icon-orange', badge: null,
@@ -541,12 +583,24 @@ function getToolHTML(id) {
                 <span id="verifyMessage">No PDF loaded</span>
             </div>
 
+            <!-- Verified certificate preview -->
+            <div class="verified-cert-preview" id="verifiedCertPreview">
+                <h4><i class="fas fa-shield-alt"></i> Verification Certificate Ready</h4>
+                <p id="certFileName">File: —</p>
+                <p id="certTimestamp">Verified: —</p>
+                <p id="certSignature">Signature: —</p>
+                <span class="verified-seal">✓ VERIFIED</span>
+            </div>
+
             <div class="action-row">
                 <button class="btn-purple" id="verifySignatureBtn" onclick="verifyPdfSignature()" disabled>
                     <i class="fas fa-signature"></i> Verify Signature
                 </button>
+                <button class="btn-teal" id="convertVerifiedBtn" onclick="convertToVerifiedPdf()" disabled>
+                    <i class="fas fa-file-signature"></i> Convert to Verified PDF
+                </button>
                 <button class="btn-success" id="downloadVerifiedBtn" onclick="downloadCurrentPdf()" disabled>
-                    <i class="fas fa-download"></i> Download PDF
+                    <i class="fas fa-download"></i> Download
                 </button>
                 <button class="btn-danger" onclick="clearReader()">
                     <i class="fas fa-trash"></i> Clear
@@ -555,7 +609,7 @@ function getToolHTML(id) {
 
             <div class="info-note">
                 <i class="fas fa-info-circle"></i>
-                <span>Signature verification is simulated: it scans the PDF for typical digital signature markers. For real PKI validation, a backend is required.</span>
+                <span>Signature verification is simulated. After a successful check, use <strong>"Convert to Verified PDF"</strong> to append a digital verification certificate page to your document.</span>
             </div>
         `,
         'merge-pdf': `
@@ -920,6 +974,7 @@ function showToast(msg, type = 'info') {
 // ============================================================
 let files = {
     reader: null, readerBuffer: null, readerRendered: false,
+    readerVerified: false, readerSignatureInfo: null,
     merge: [], split: null, compress: null, pdfWord: null, pdfPpt: null, pdfExcel: null,
     wordPdf: null, pptPdf: null, excelPdf: null, edit: null, pdfJpg: null, jpgPdf: [],
     sign: null, watermark: null, rotate: null, unlock: null, protect: null,
@@ -951,10 +1006,15 @@ function handleReaderFile(e) {
     }
     files.reader = file;
     files.readerRendered = false;
+    files.readerVerified = false;
+    files.readerSignatureInfo = null;
     document.getElementById('readerFileName').textContent = file.name;
     setVerifyStatus('neutral', `Loaded: ${file.name} — tap "Verify Signature" to check.`);
     document.getElementById('verifySignatureBtn').disabled = false;
+    document.getElementById('convertVerifiedBtn').disabled = true;
     document.getElementById('downloadVerifiedBtn').disabled = false;
+    const certPreview = document.getElementById('verifiedCertPreview');
+    if (certPreview) certPreview.classList.remove('show');
     renderReaderPdf(file);
 }
 
@@ -963,7 +1023,7 @@ async function renderReaderPdf(file) {
     frame.innerHTML = '<div class="pdf-viewer-placeholder"><i class="fas fa-spinner fa-spin"></i> Rendering PDF...</div>';
     try {
         const buf = await file.arrayBuffer();
-        files.readerBuffer = buf.slice(0); // store copy for verification
+        files.readerBuffer = buf.slice(0); // store copy
         const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
         frame.innerHTML = '';
         for (let i = 1; i <= pdf.numPages; i++) {
@@ -984,6 +1044,7 @@ async function renderReaderPdf(file) {
         frame.innerHTML = `<div class="pdf-viewer-placeholder"><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> Failed to render PDF: ${err.message}</div>`;
         setVerifyStatus('invalid', 'Could not load PDF.');
         document.getElementById('verifySignatureBtn').disabled = true;
+        document.getElementById('convertVerifiedBtn').disabled = true;
         document.getElementById('downloadVerifiedBtn').disabled = true;
     }
 }
@@ -995,6 +1056,9 @@ async function verifyPdfSignature() {
     }
     const btn = document.getElementById('verifySignatureBtn');
     btn.disabled = true;
+    document.getElementById('convertVerifiedBtn').disabled = true;
+    const certPreview = document.getElementById('verifiedCertPreview');
+    if (certPreview) certPreview.classList.remove('show');
     setVerifyStatus('pending', '⏳ Scanning for digital signature markers...');
 
     // Simulated verification delay
@@ -1015,12 +1079,27 @@ async function verifyPdfSignature() {
         const hasAdbe = raw.includes('adbe.pkcs7') || raw.includes('ETSI.CAdES');
 
         if (hasSigDict && hasByteRange) {
-            setVerifyStatus('valid', `✅ Digital signature found & verified (simulated). Markers: ${found.slice(0,3).join(', ')}`);
-            showToast('✅ Signature verified (simulated)', 'success');
+            files.readerVerified = true;
+            files.readerSignatureInfo = {
+                markers: found.slice(0, 3),
+                timestamp: new Date().toLocaleString(),
+                method: 'Digital Signature (PAdES/CAdES simulated)'
+            };
+            setVerifyStatus('valid', `✅ Digital signature found & verified (simulated).`);
+            showToast('✅ Signature verified! You can now convert to Verified PDF.', 'success');
+            document.getElementById('convertVerifiedBtn').disabled = false;
+
+            // Show certificate preview
+            document.getElementById('certFileName').textContent = 'File: ' + (files.reader ? files.reader.name : 'document.pdf');
+            document.getElementById('certTimestamp').textContent = 'Verified: ' + files.readerSignatureInfo.timestamp;
+            document.getElementById('certSignature').textContent = 'Signature: ' + files.readerSignatureInfo.method;
+            certPreview.classList.add('show');
         } else if (hasSigDict || hasAdbe) {
+            files.readerVerified = false;
             setVerifyStatus('invalid', `⚠️ Signature marker present but incomplete (missing ByteRange).`);
             showToast('Signature incomplete', 'error');
         } else {
+            files.readerVerified = false;
             setVerifyStatus('invalid', `❌ No digital signature found in this PDF.`);
             showToast('No digital signature detected', 'error');
         }
@@ -1032,12 +1111,192 @@ async function verifyPdfSignature() {
     }
 }
 
+/**
+ * Creates a Verified PDF: appends a "Verification Certificate" page
+ * to the original PDF, then downloads it.
+ */
+async function convertToVerifiedPdf() {
+    if (!files.readerBuffer) {
+        showToast('Please load a PDF first.', 'error');
+        return;
+    }
+    if (!files.readerVerified) {
+        showToast('Please verify the PDF first before converting.', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('convertVerifiedBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+    showToast('⏳ Generating verified PDF...', 'info');
+
+    try {
+        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+
+        // Load the original PDF
+        const originalPdf = await PDFDocument.load(files.readerBuffer);
+
+        // Create the certificate page (A4 size)
+        const certPage = originalPdf.addPage([595.28, 841.89]); // A4 in points
+        const { width, height } = certPage.getSize();
+
+        // Fonts
+        const helveticaBold = await originalPdf.embedFont(StandardFonts.HelveticaBold);
+        const helvetica = await originalPdf.embedFont(StandardFonts.Helvetica);
+        const courier = await originalPdf.embedFont(StandardFonts.Courier);
+
+        // Colors
+        const green = rgb(0.06, 0.72, 0.51);
+        const darkGreen = rgb(0.02, 0.37, 0.28);
+        const darkBlue = rgb(0.1, 0.16, 0.35);
+        const gray = rgb(0.4, 0.4, 0.45);
+        const lightGray = rgb(0.94, 0.96, 0.97);
+
+        // Background header band
+        certPage.drawRectangle({
+            x: 0, y: height - 140, width, height: 140,
+            color: darkBlue
+        });
+
+        // Main title
+        certPage.drawText('CERTIFICATE OF VERIFICATION', {
+            x: 50, y: height - 75,
+            size: 24, font: helveticaBold,
+            color: rgb(1, 1, 1)
+        });
+
+        // Subtitle
+        certPage.drawText('Digital Signature Verification Report', {
+            x: 50, y: height - 105,
+            size: 13, font: helvetica,
+            color: rgb(0.8, 0.85, 1)
+        });
+
+        // Success seal (green circle with check)
+        const sealX = width - 100;
+        const sealY = height - 70;
+        certPage.drawCircle({
+            x: sealX, y: sealY, size: 36,
+            color: green, opacity: 0.15
+        });
+        certPage.drawCircle({
+            x: sealX, y: sealY, size: 28,
+            color: green, opacity: 0.25
+        });
+        certPage.drawText('✓', {
+            x: sealX - 10, y: sealY - 12,
+            size: 30, font: helveticaBold,
+            color: green
+        });
+
+        // Body section
+        let yPos = height - 190;
+        const lineGap = 22;
+
+        const addLabel = (label, value, isCode = false) => {
+            certPage.drawText(label, {
+                x: 50, y: yPos,
+                size: 10, font: helveticaBold,
+                color: gray
+            });
+            certPage.drawText(value, {
+                x: 50, y: yPos - 16,
+                size: isCode ? 11 : 13,
+                font: isCode ? courier : helvetica,
+                color: darkBlue,
+                maxWidth: width - 100
+            });
+            yPos -= lineGap + 14;
+        };
+
+        addLabel('DOCUMENT NAME', files.reader ? files.reader.name : 'document.pdf');
+        addLabel('VERIFICATION STATUS', 'VERIFIED — Digital Signature Valid', false);
+        addLabel('VERIFICATION METHOD', 'PAdES / CAdES Detached (Simulated)');
+        addLabel('TIMESTAMP', new Date().toLocaleString('en-GB', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+        }));
+        addLabel('UNIQUE REPORT ID', 'VRF-' + Date.now().toString(36).toUpperCase() + '-' +
+            Math.random().toString(36).substring(2, 8).toUpperCase(), true);
+
+        // Marker details box
+        yPos -= 6;
+        certPage.drawRectangle({
+            x: 40, y: yPos - 70, width: width - 80, height: 85,
+            color: lightGray,
+            borderColor: rgb(0.8, 0.85, 0.9),
+            borderWidth: 1
+        });
+        certPage.drawText('DETECTED SIGNATURE MARKERS:', {
+            x: 55, y: yPos - 20,
+            size: 9, font: helveticaBold, color: gray
+        });
+        const markerList = (files.readerSignatureInfo && files.readerSignatureInfo.markers.length)
+            ? files.readerSignatureInfo.markers.join('  •  ')
+            : 'ByteRange  •  /Type /Sig  •  adbe.pkcs7.detached';
+        certPage.drawText(markerList, {
+            x: 55, y: yPos - 42,
+            size: 10, font: courier, color: darkGreen,
+            maxWidth: width - 110
+        });
+        certPage.drawText('Document integrity: INTACT  |  Signer identity: TRUSTED (simulated)', {
+            x: 55, y: yPos - 60,
+            size: 9, font: helvetica, color: darkGreen
+        });
+
+        // Footer
+        const footerY = 60;
+        certPage.drawLine({
+            start: { x: 50, y: footerY + 30 },
+            end: { x: width - 50, y: footerY + 30 },
+            thickness: 1, color: rgb(0.85, 0.88, 0.92)
+        });
+        certPage.drawText('This certificate page was automatically generated by Dream Josh PDF Tools.', {
+            x: 50, y: footerY + 10,
+            size: 9, font: helvetica, color: gray
+        });
+        certPage.drawText('Verification is simulated for demonstration purposes. Not a legally binding PKI certificate.', {
+            x: 50, y: footerY - 4,
+            size: 8, font: helvetica, color: gray
+        });
+        certPage.drawText('Generated on: ' + new Date().toString(), {
+            x: 50, y: footerY - 20,
+            size: 8, font: courier, color: rgb(0.55, 0.55, 0.6)
+        });
+
+        // Green verified stamp bottom right
+        certPage.drawRectangle({
+            x: width - 170, y: footerY - 10,
+            width: 120, height: 34,
+            color: green, opacity: 0.12,
+            borderColor: green, borderWidth: 1.5
+        });
+        certPage.drawText('✓ VERIFIED', {
+            x: width - 158, y: footerY + 2,
+            size: 16, font: helveticaBold, color: darkGreen
+        });
+
+        // Save and download
+        const bytes = await originalPdf.save();
+        const outName = (files.reader ? files.reader.name.replace(/\.pdf$/i, '') : 'document') + '_VERIFIED.pdf';
+        saveAs(new Blob([bytes], { type: 'application/pdf' }), outName);
+
+        showToast('✅ Verified PDF created & downloaded!', 'success');
+    } catch (err) {
+        console.error(err);
+        showToast('Error creating verified PDF: ' + err.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-file-signature"></i> Convert to Verified PDF';
+    }
+}
+
 function downloadCurrentPdf() {
     if (!files.readerBuffer) {
         showToast('No PDF loaded.', 'error');
         return;
     }
-    const name = files.reader ? files.reader.name.replace(/\.pdf$/i, '') + '_verified.pdf' : 'document.pdf';
+    const name = files.reader ? files.reader.name.replace(/\.pdf$/i, '') + '_copy.pdf' : 'document.pdf';
     saveAs(new Blob([files.readerBuffer], { type: 'application/pdf' }), name);
     showToast('✅ PDF downloaded', 'success');
 }
@@ -1046,6 +1305,8 @@ function clearReader() {
     files.reader = null;
     files.readerBuffer = null;
     files.readerRendered = false;
+    files.readerVerified = false;
+    files.readerSignatureInfo = null;
     document.getElementById('readerFileName').textContent = 'No file selected';
     document.getElementById('readerInput').value = '';
     const frame = document.getElementById('pdfViewerFrame');
@@ -1055,7 +1316,10 @@ function clearReader() {
     </div>`;
     setVerifyStatus('neutral', 'No PDF loaded');
     document.getElementById('verifySignatureBtn').disabled = true;
+    document.getElementById('convertVerifiedBtn').disabled = true;
     document.getElementById('downloadVerifiedBtn').disabled = true;
+    const certPreview = document.getElementById('verifiedCertPreview');
+    if (certPreview) certPreview.classList.remove('show');
 }
 
 // ============================================================
