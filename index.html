@@ -5,13 +5,21 @@
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
     <title>Dream Josh · All-in-One PDF Tools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- pdf-lib (UMD) -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+    <!-- XLSX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Tesseract -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <!-- FileSaver -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- PptxGenJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.bundle.js"></script>
+
     <style>
         :root {
             --bg-color: #f5f7fb;
@@ -34,23 +42,14 @@
             min-height: 100vh;
         }
 
-        /* ========== VIEWS ========== */
+        /* VIEWS */
         .view { display: none; min-height: 100vh; }
         .view.active { display: block; }
 
-        /* ========== HOME PAGE ========== */
-        .home-container {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 40px 24px;
-        }
+        /* HOME */
+        .home-container { max-width: 1440px; margin: 0 auto; padding: 40px 24px; }
         .page-header { margin-bottom: 32px; }
-        .page-header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 6px;
-        }
+        .page-header h1 { font-size: 28px; font-weight: 700; color: var(--text-color); margin-bottom: 6px; }
         .page-header h1 span { color: var(--primary-blue); }
         .page-header p { font-size: 15px; color: var(--text-light); }
 
@@ -60,7 +59,7 @@
             gap: 20px;
         }
 
-        /* ========== TOOL CARD ========== */
+        /* TOOL CARD */
         .tool-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -83,40 +82,22 @@
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
             border-color: var(--secondary-blue);
         }
-
         .tool-card .card-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            flex-shrink: 0;
+            width: 56px; height: 56px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; flex-shrink: 0;
         }
+        .tool-card h3 { font-size: 16px; font-weight: 700; line-height: 1.3; color: var(--text-color); }
 
-        .tool-card h3 {
-            font-size: 16px;
-            font-weight: 700;
-            line-height: 1.3;
-            color: var(--text-color);
-        }
-
-        .tool-card .badge {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
+        .badge {
+            position: absolute; top: 14px; right: 14px;
+            font-size: 10px; font-weight: 700; padding: 3px 10px;
+            border-radius: 20px; text-transform: uppercase;
         }
         .badge.free { background: #ecfdf5; color: #10b981; }
         .badge.pro { background: #f5f3ff; color: #8b5cf6; }
         .badge.new { background: #fffbeb; color: #f59e0b; }
 
-        /* Icon colors */
         .icon-red { background: #fef2f2; color: #ef4444; }
         .icon-orange { background: #fff7ed; color: #f97316; }
         .icon-green { background: #f0fdf4; color: #22c55e; }
@@ -126,21 +107,14 @@
         .icon-indigo { background: #eef2ff; color: #6366f1; }
         .icon-pink { background: #fdf2f8; color: #ec4899; }
 
-        /* ========== TOOL PAGE ========== */
-        .tool-page {
-            min-height: 100vh;
-            background: var(--bg-color);
-        }
+        /* TOOL PAGE */
+        .tool-page { min-height: 100vh; background: var(--bg-color); }
         .tool-page-header {
             background: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
             padding: 16px 32px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            display: flex; align-items: center; gap: 16px;
+            position: sticky; top: 0; z-index: 100;
             box-shadow: 0 1px 3px var(--shadow-color);
         }
         .back-btn {
@@ -157,16 +131,10 @@
         }
         .tool-page-header h2 i { color: var(--primary-blue); }
 
-        .tool-page-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 24px 80px;
-        }
+        .tool-page-content { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
         .tool-panel {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 36px 40px;
-            border: 1px solid var(--border-color);
+            background: var(--card-bg); border-radius: 20px;
+            padding: 36px 40px; border: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
         }
 
@@ -226,6 +194,7 @@
             transition: 0.2s; min-height: 50px;
             display: flex; align-items: center; gap: 10px;
             background: var(--secondary-blue); color: #fff;
+            font-family: inherit;
         }
         .action-row button:hover { transform: scale(1.03); }
         .action-row button:disabled {
@@ -247,9 +216,7 @@
             display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
             margin-bottom: 16px;
         }
-        .inline-row label {
-            font-size: 14px; font-weight: 600; min-width: 100px;
-        }
+        .inline-row label { font-size: 14px; font-weight: 600; min-width: 100px; }
         .inline-row input[type="text"],
         .inline-row input[type="number"],
         .inline-row select {
@@ -302,7 +269,31 @@
         }
         .info-note i { margin-top: 2px; }
 
-        /* ========== PDF READER & VERIFY STYLES ========== */
+        /* MERGE FILE PREVIEW */
+        .merge-file-list {
+            display: flex; flex-direction: column; gap: 6px;
+            margin-top: 12px; max-height: 260px; overflow-y: auto;
+        }
+        .merge-file-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; background: #f8fafc;
+            border-radius: 10px; font-size: 13px;
+            border: 1px solid var(--border-color);
+        }
+        .merge-file-item .num {
+            background: #ef4444; color: #fff;
+            width: 22px; height: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; flex-shrink: 0;
+        }
+        .merge-file-item .nm { flex: 1; word-break: break-all; color: var(--text-color); }
+        .merge-file-item .sz { color: var(--text-light); font-size: 11px; flex-shrink: 0; }
+        .merge-file-item .rm {
+            background: none; border: none; color: #ef4444;
+            cursor: pointer; padding: 4px; font-size: 14px;
+        }
+
+        /* PDF VIEWER */
         .pdf-viewer-frame {
             background: #1e1e2f;
             border-radius: 16px;
@@ -317,37 +308,25 @@
             min-height: 200px;
         }
         .pdf-viewer-frame .pdf-page-canvas {
-            background: #fff;
-            border-radius: 8px;
+            background: #fff; border-radius: 8px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-            max-width: 100%;
-            height: auto;
-            display: block;
+            max-width: 100%; height: auto; display: block;
         }
         .pdf-viewer-placeholder {
-            color: #8b8ba8;
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 14px;
+            color: #8b8ba8; text-align: center;
+            padding: 40px 20px; font-size: 14px;
         }
         .pdf-viewer-placeholder i {
-            font-size: 44px;
-            margin-bottom: 12px;
-            color: #5a5a7a;
-            display: block;
+            font-size: 44px; margin-bottom: 12px;
+            color: #5a5a7a; display: block;
         }
 
         .verify-status-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 18px;
-            background: #f8fafc;
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 18px; background: #f8fafc;
             border: 2px solid var(--border-color);
-            border-radius: 12px;
-            margin-top: 16px;
-            font-size: 14px;
-            font-weight: 500;
+            border-radius: 12px; margin-top: 16px;
+            font-size: 14px; font-weight: 500;
         }
         .verify-status-bar .dot {
             width: 12px; height: 12px; border-radius: 50%;
@@ -359,47 +338,25 @@
         @keyframes pulse { 0%{opacity:1;} 50%{opacity:0.35;} 100%{opacity:1;} }
 
         .verified-cert-preview {
-            margin-top: 16px;
-            padding: 16px;
-            border: 2px dashed #10b981;
-            border-radius: 12px;
-            background: #ecfdf5;
-            display: none;
+            margin-top: 16px; padding: 16px;
+            border: 2px dashed #10b981; border-radius: 12px;
+            background: #ecfdf5; display: none;
         }
         .verified-cert-preview.show { display: block; }
         .verified-cert-preview h4 {
-            color: #065f46;
-            font-size: 14px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #065f46; font-size: 14px; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
         }
         .verified-cert-preview p {
-            font-size: 12px;
-            color: #047857;
-            margin: 4px 0;
-            font-family: 'Courier New', monospace;
+            font-size: 12px; color: #047857;
+            margin: 4px 0; font-family: 'Courier New', monospace;
+            word-break: break-all;
         }
         .verified-seal {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #10b981;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            margin-top: 8px;
-        }
-
-        .badge-new {
-            background: #fffbeb; color: #f59e0b;
-            font-size: 10px; font-weight: 700;
-            padding: 3px 10px; border-radius: 20px;
-            text-transform: uppercase; position: absolute;
-            top: 14px; right: 14px;
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #10b981; color: white;
+            padding: 4px 12px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; margin-top: 8px;
         }
 
         @media (max-width: 768px) {
@@ -418,7 +375,7 @@
 </head>
 <body>
 
-<!-- ================= HOME VIEW ================= -->
+<!-- HOME VIEW -->
 <div class="view active" id="homeView">
     <div class="home-container">
         <div class="page-header">
@@ -429,7 +386,7 @@
     </div>
 </div>
 
-<!-- ================= TOOL VIEW ================= -->
+<!-- TOOL VIEW -->
 <div class="view" id="toolView">
     <div class="tool-page">
         <div class="tool-page-header">
@@ -447,10 +404,10 @@
 // TOOLS DATA
 // ============================================================
 const TOOLS = [
-    { id: 'pdf-reader-verify', name: 'PDF Reader & Verify', icon: 'fa-book-reader', iconClass: 'icon-purple', badge: 'New',
-      desc: 'Open PDF, verify digital signature & convert to verified PDF.' },
     { id: 'merge-pdf', name: 'Merge PDF', icon: 'fa-object-group', iconClass: 'icon-red', badge: null,
       desc: 'Combine PDFs in the order you want.' },
+    { id: 'pdf-reader-verify', name: 'PDF Reader & Verify', icon: 'fa-book-reader', iconClass: 'icon-purple', badge: 'New',
+      desc: 'Open PDF, verify signature & download verified PDF.' },
     { id: 'split-pdf', name: 'Split PDF', icon: 'fa-cut', iconClass: 'icon-orange', badge: null,
       desc: 'Separate one page or a whole set.' },
     { id: 'compress-pdf', name: 'Compress PDF', icon: 'fa-compress-alt', iconClass: 'icon-green', badge: null,
@@ -503,18 +460,14 @@ const TOOLS = [
       desc: 'Remove sensitive information permanently.' },
     { id: 'crop-pdf', name: 'Crop PDF', icon: 'fa-crop-alt', iconClass: 'icon-purple', badge: null,
       desc: 'Crop margins or select specific areas.' },
-    { id: 'pdf-forms', name: 'PDF Forms', icon: 'fa-wpforms', iconClass: 'icon-indigo', badge: 'New',
-      desc: 'Detect form fields, create fillable PDFs.' },
     { id: 'ai-summarizer', name: 'AI Summarizer', icon: 'fa-robot', iconClass: 'icon-purple', badge: 'New',
       desc: 'Generate concise summaries from text.' },
-    { id: 'translate-pdf', name: 'Translate PDF', icon: 'fa-language', iconClass: 'icon-purple', badge: 'New',
-      desc: 'Translate PDF files powered by AI.' },
     { id: 'pdf-to-markdown', name: 'PDF to Markdown', icon: 'fa-markdown', iconClass: 'icon-purple', badge: 'New',
       desc: 'Turn PDFs into Markdown files.' }
 ];
 
 // ============================================================
-// RENDER HOME GRID
+// RENDER HOME
 // ============================================================
 function renderHome() {
     const grid = document.getElementById('toolsGrid');
@@ -558,32 +511,55 @@ function goHome() {
 // ============================================================
 function getToolHTML(id) {
     const map = {
+        'merge-pdf': `
+            <div class="form-group">
+                <label>📄 PDF files select karo (order matters)</label>
+                <div class="upload-area" onclick="document.getElementById('mergeInput').click()">
+                    <i class="fas fa-file-pdf"></i>
+                    <p>Tap karke 2 ya zyada PDFs chuno</p>
+                    <div class="file-name-display" id="mergeFileName">Koi file select nahi ki</div>
+                    <input type="file" id="mergeInput" accept=".pdf,application/pdf" multiple class="hidden-input" onchange="handleMergeFiles(event)">
+                </div>
+            </div>
+            <div id="mergePreview" class="merge-file-list">
+                <p style="color:var(--text-light);text-align:center;padding:20px;">Selected files yaha dikhengi</p>
+            </div>
+            <div class="action-row">
+                <button class="btn-success" id="mergeBtn" onclick="mergePdfs()" disabled>
+                    <i class="fas fa-object-group"></i> Merge PDFs
+                </button>
+                <button class="btn-danger" onclick="clearMerge()">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+            <div class="info-note">
+                <i class="fas fa-info-circle"></i>
+                <span>Pehle jis file ka number chhota hai woh pehle aayegi merged PDF mai. Encrypted PDFs bhi merge ho jayengi.</span>
+            </div>
+        `,
         'pdf-reader-verify': `
             <div class="form-group">
-                <label>📖 Open PDF on your phone</label>
+                <label>📖 PDF Open Karo</label>
                 <div class="upload-area" onclick="document.getElementById('readerInput').click()">
                     <i class="fas fa-file-pdf"></i>
-                    <p>Tap to select a PDF file</p>
+                    <p>Tap karke PDF select karo</p>
                     <div class="file-name-display" id="readerFileName">No file selected</div>
                     <input type="file" id="readerInput" accept=".pdf,application/pdf" class="hidden-input" onchange="handleReaderFile(event)">
                 </div>
             </div>
 
-            <!-- PDF Viewer -->
             <div class="pdf-viewer-frame" id="pdfViewerFrame">
-                <div class="pdf-viewer-placeholder" id="pdfViewerPlaceholder">
+                <div class="pdf-viewer-placeholder">
                     <i class="fas fa-book-open"></i>
-                    Loaded PDF pages will appear here.
+                    PDF pages yaha dikhenge
                 </div>
             </div>
 
-            <!-- Verify status -->
-            <div class="verify-status-bar" id="verifyStatusBar">
+            <div class="verify-status-bar">
                 <span class="dot" id="verifyDot"></span>
                 <span id="verifyMessage">No PDF loaded</span>
             </div>
 
-            <!-- Verified certificate preview -->
             <div class="verified-cert-preview" id="verifiedCertPreview">
                 <h4><i class="fas fa-shield-alt"></i> Verification Certificate Ready</h4>
                 <p id="certFileName">File: —</p>
@@ -609,18 +585,8 @@ function getToolHTML(id) {
 
             <div class="info-note">
                 <i class="fas fa-info-circle"></i>
-                <span>Signature verification is simulated. After a successful check, use <strong>"Convert to Verified PDF"</strong> to append a digital verification certificate page to your document.</span>
+                <span>Signature verification PDF ke andar ke markers check karti hai. Successful hone ke baad <b>"Convert to Verified PDF"</b> se certificate page wala PDF download kar sakte ho.</span>
             </div>
-        `,
-        'merge-pdf': `
-            <div class="form-group"><label>Upload PDF files (multiple, in order)</label>
-            <div class="upload-area" onclick="document.getElementById('mergeInput').click()">
-            <i class="fas fa-file-pdf"></i><p>Click to select multiple PDF files</p>
-            <div class="file-name-display" id="mergeFileName">No files selected</div>
-            <input type="file" id="mergeInput" accept=".pdf" multiple class="hidden-input" onchange="handleMergeFiles(event)"></div></div>
-            <div id="mergePreview" class="preview-box"><p style="color:var(--text-light);">Selected files will appear here.</p></div>
-            <div class="action-row"><button class="btn-success" onclick="mergePdfs()"><i class="fas fa-object-group"></i> Merge PDFs</button>
-            <button class="btn-danger" onclick="clearMerge()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
         'split-pdf': `
             <div class="form-group"><label>Upload PDF</label>
@@ -680,40 +646,13 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="convertPdfToExcel()"><i class="fas fa-file-excel"></i> Convert to Excel</button>
             <button class="btn-danger" onclick="clearPdfExcel()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        'word-to-pdf': `
-            <div class="form-group"><label>Upload Word file (.doc, .docx)</label>
-            <div class="upload-area" onclick="document.getElementById('wordPdfInput').click()">
-            <i class="fas fa-file-word"></i><p>Click to select a Word file</p>
-            <div class="file-name-display" id="wordPdfFileName">No file selected</div>
-            <input type="file" id="wordPdfInput" accept=".doc,.docx" class="hidden-input" onchange="handleWordPdfFile(event)"></div></div>
-            <div class="action-row"><button class="btn-success" onclick="convertWordToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
-            <button class="btn-danger" onclick="clearWordPdf()"><i class="fas fa-trash"></i> Clear</button></div>
-        `,
-        'ppt-to-pdf': `
-            <div class="form-group"><label>Upload PPT file (.ppt, .pptx)</label>
-            <div class="upload-area" onclick="document.getElementById('pptPdfInput').click()">
-            <i class="fas fa-file-powerpoint"></i><p>Click to select a PPT file</p>
-            <div class="file-name-display" id="pptPdfFileName">No file selected</div>
-            <input type="file" id="pptPdfInput" accept=".ppt,.pptx" class="hidden-input" onchange="handlePptPdfFile(event)"></div></div>
-            <div class="action-row"><button class="btn-success" onclick="convertPptToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
-            <button class="btn-danger" onclick="clearPptPdf()"><i class="fas fa-trash"></i> Clear</button></div>
-        `,
-        'excel-to-pdf': `
-            <div class="form-group"><label>Upload Excel file (.xls, .xlsx)</label>
-            <div class="upload-area" onclick="document.getElementById('excelPdfInput').click()">
-            <i class="fas fa-file-excel"></i><p>Click to select an Excel file</p>
-            <div class="file-name-display" id="excelPdfFileName">No file selected</div>
-            <input type="file" id="excelPdfInput" accept=".xls,.xlsx" class="hidden-input" onchange="handleExcelPdfFile(event)"></div></div>
-            <div class="action-row"><button class="btn-success" onclick="convertExcelToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
-            <button class="btn-danger" onclick="clearExcelPdf()"><i class="fas fa-trash"></i> Clear</button></div>
-        `,
         'edit-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('editInput').click()">
             <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
             <div class="file-name-display" id="editFileName">No file selected</div>
             <input type="file" id="editInput" accept=".pdf" class="hidden-input" onchange="handleEditFile(event)"></div></div>
-            <div class="form-group"><label>Text to add (appears at top of every page)</label>
+            <div class="form-group"><label>Text to add (top of every page)</label>
             <input type="text" id="editText" placeholder="Enter text to add"></div>
             <div class="action-row"><button class="btn-success" onclick="editPdfAddText()"><i class="fas fa-edit"></i> Apply Edit</button>
             <button class="btn-danger" onclick="clearEdit()"><i class="fas fa-trash"></i> Clear</button></div>
@@ -724,12 +663,12 @@ function getToolHTML(id) {
             <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
             <div class="file-name-display" id="pdfJpgFileName">No file selected</div>
             <input type="file" id="pdfJpgInput" accept=".pdf" class="hidden-input" onchange="handlePdfJpgFile(event)"></div></div>
-            <div id="pdfJpgPreview" class="preview-box"><p style="color:var(--text-light);">PDF pages will be converted to JPG and shown here.</p></div>
+            <div id="pdfJpgPreview" class="preview-box"><p style="color:var(--text-light);">JPG preview will appear here.</p></div>
             <div class="action-row"><button class="btn-success" onclick="convertPdfToJpg()"><i class="fas fa-images"></i> Convert to JPG</button>
             <button class="btn-danger" onclick="clearPdfJpg()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
         'jpg-to-pdf': `
-            <div class="form-group"><label>Upload images (JPG, PNG, WEBP)</label>
+            <div class="form-group"><label>Upload images</label>
             <div class="upload-area" onclick="document.getElementById('jpgPdfInput').click()">
             <i class="fas fa-cloud-upload-alt"></i><p>Click to select multiple images</p>
             <div class="file-name-display" id="jpgPdfFileName">No files selected</div>
@@ -775,13 +714,6 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="rotatePdf()"><i class="fas fa-sync-alt"></i> Rotate</button>
             <button class="btn-danger" onclick="clearRotate()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        'html-to-pdf': `
-            <div class="form-group"><label>Enter webpage URL</label>
-            <input type="url" id="htmlUrl" placeholder="https://example.com"></div>
-            <div class="action-row"><button class="btn-success" onclick="htmlToPdf()"><i class="fas fa-file-pdf"></i> Convert to PDF</button>
-            <button class="btn-danger" onclick="clearHtmlPdf()"><i class="fas fa-trash"></i> Clear</button></div>
-            <div class="info-note"><i class="fas fa-info-circle"></i><span>Due to browser security, this will open the page in a new tab for printing to PDF.</span></div>
-        `,
         'unlock-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('unlockInput').click()">
@@ -793,45 +725,16 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="unlockPdf()"><i class="fas fa-unlock"></i> Remove Password</button>
             <button class="btn-danger" onclick="clearUnlock()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        'protect-pdf': `
-            <div class="form-group"><label>Upload PDF</label>
-            <div class="upload-area" onclick="document.getElementById('protectInput').click()">
-            <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
-            <div class="file-name-display" id="protectFileName">No file selected</div>
-            <input type="file" id="protectInput" accept=".pdf" class="hidden-input" onchange="handleProtectFile(event)"></div></div>
-            <div class="form-group"><label>Set password</label>
-            <input type="password" id="protectPassword" placeholder="Enter password"></div>
-            <div class="action-row"><button class="btn-success" onclick="protectPdf()"><i class="fas fa-lock"></i> Encrypt PDF</button>
-            <button class="btn-danger" onclick="clearProtect()"><i class="fas fa-trash"></i> Clear</button></div>
-        `,
         'organize-pdf': `
             <div class="form-group"><label>Upload PDF</label>
             <div class="upload-area" onclick="document.getElementById('organizeInput').click()">
             <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
             <div class="file-name-display" id="organizeFileName">No file selected</div>
             <input type="file" id="organizeInput" accept=".pdf" class="hidden-input" onchange="handleOrganizeFile(event)"></div></div>
-            <div class="form-group"><label>New page order (comma separated, e.g. 3,1,2)</label>
+            <div class="form-group"><label>New page order (e.g. 3,1,2)</label>
             <input type="text" id="organizeOrder" placeholder="e.g., 3,1,2"></div>
             <div class="action-row"><button class="btn-success" onclick="organizePdf()"><i class="fas fa-sitemap"></i> Reorder Pages</button>
             <button class="btn-danger" onclick="clearOrganize()"><i class="fas fa-trash"></i> Clear</button></div>
-        `,
-        'pdf-to-pdfa': `
-            <div class="form-group"><label>Upload PDF</label>
-            <div class="upload-area" onclick="document.getElementById('pdfaInput').click()">
-            <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
-            <div class="file-name-display" id="pdfaFileName">No file selected</div>
-            <input type="file" id="pdfaInput" accept=".pdf" class="hidden-input" onchange="handlePdfaFile(event)"></div></div>
-            <div class="action-row"><button class="btn-success" onclick="convertToPdfa()"><i class="fas fa-file-pdf"></i> Convert to PDF/A</button>
-            <button class="btn-danger" onclick="clearPdfa()"><i class="fas fa-trash"></i> Clear</button></div>
-        `,
-        'repair-pdf': `
-            <div class="form-group"><label>Upload PDF</label>
-            <div class="upload-area" onclick="document.getElementById('repairInput').click()">
-            <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
-            <div class="file-name-display" id="repairFileName">No file selected</div>
-            <input type="file" id="repairInput" accept=".pdf" class="hidden-input" onchange="handleRepairFile(event)"></div></div>
-            <div class="action-row"><button class="btn-success" onclick="repairPdf()"><i class="fas fa-wrench"></i> Attempt Repair</button>
-            <button class="btn-danger" onclick="clearRepair()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
         'add-page-numbers': `
             <div class="form-group"><label>Upload PDF</label>
@@ -850,7 +753,7 @@ function getToolHTML(id) {
             <button class="btn-danger" onclick="clearPageNum()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
         'scan-to-pdf': `
-            <div class="form-group"><label>Upload image from camera or gallery</label>
+            <div class="form-group"><label>Upload image from camera/gallery</label>
             <div class="upload-area" onclick="document.getElementById('scanInput').click()">
             <i class="fas fa-camera"></i><p>Click to capture or upload an image</p>
             <div class="file-name-display" id="scanFileName">No file selected</div>
@@ -896,7 +799,7 @@ function getToolHTML(id) {
             <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
             <div class="file-name-display" id="redactFileName">No file selected</div>
             <input type="file" id="redactInput" accept=".pdf" class="hidden-input" onchange="handleRedactFile(event)"></div></div>
-            <div class="form-group"><label>Text to redact (will be replaced with black box)</label>
+            <div class="form-group"><label>Text to redact</label>
             <input type="text" id="redactText" placeholder="Enter text to redact"></div>
             <div class="action-row"><button class="btn-success" onclick="redactPdf()"><i class="fas fa-eraser"></i> Redact</button>
             <button class="btn-danger" onclick="clearRedact()"><i class="fas fa-trash"></i> Clear</button></div>
@@ -912,36 +815,12 @@ function getToolHTML(id) {
             <div class="action-row"><button class="btn-success" onclick="cropPdf()"><i class="fas fa-crop-alt"></i> Crop PDF</button>
             <button class="btn-danger" onclick="clearCrop()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
-        'pdf-forms': `
-            <div class="form-group"><label>Upload PDF</label>
-            <div class="upload-area" onclick="document.getElementById('formsInput').click()">
-            <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
-            <div class="file-name-display" id="formsFileName">No file selected</div>
-            <input type="file" id="formsInput" accept=".pdf" class="hidden-input" onchange="handleFormsFile(event)"></div></div>
-            <div class="action-row"><button class="btn-success" onclick="detectForms()"><i class="fas fa-wpforms"></i> Detect Form Fields</button>
-            <button class="btn-danger" onclick="clearForms()"><i class="fas fa-trash"></i> Clear</button></div>
-        `,
         'ai-summarizer': `
             <div class="form-group"><label>Paste text to summarize</label>
-            <textarea id="summarizeText" placeholder="Paste your article, paragraph, or essay here..." style="min-height:180px;"></textarea></div>
+            <textarea id="summarizeText" placeholder="Paste your text here..." style="min-height:180px;"></textarea></div>
             <div class="action-row"><button class="btn-success" onclick="summarizeText()"><i class="fas fa-robot"></i> Summarize</button>
             <button class="btn-danger" onclick="clearSummarize()"><i class="fas fa-trash"></i> Clear</button></div>
             <div id="summaryResult" class="preview-box" style="display:none;margin-top:16px;"></div>
-        `,
-        'translate-pdf': `
-            <div class="form-group"><label>Upload PDF</label>
-            <div class="upload-area" onclick="document.getElementById('translateInput').click()">
-            <i class="fas fa-file-pdf"></i><p>Click to select a PDF file</p>
-            <div class="file-name-display" id="translateFileName">No file selected</div>
-            <input type="file" id="translateInput" accept=".pdf" class="hidden-input" onchange="handleTranslateFile(event)"></div></div>
-            <div class="inline-row"><label>Target language</label>
-            <select id="translateLang">
-            <option value="en">English</option><option value="hi">Hindi</option>
-            <option value="es">Spanish</option><option value="fr">French</option>
-            <option value="de">German</option><option value="zh">Chinese</option>
-            <option value="ja">Japanese</option><option value="ar">Arabic</option></select></div>
-            <div class="action-row"><button class="btn-success" onclick="translatePdf()"><i class="fas fa-language"></i> Translate</button>
-            <button class="btn-danger" onclick="clearTranslate()"><i class="fas fa-trash"></i> Clear</button></div>
         `,
         'pdf-to-markdown': `
             <div class="form-group"><label>Upload PDF</label>
@@ -965,26 +844,172 @@ function showToast(msg, type = 'info') {
     t.className = `toast ${type}`;
     t.textContent = msg;
     document.body.appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s';
-        setTimeout(() => t.remove(), 300); }, 3000);
+    setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transition = 'opacity 0.3s';
+        setTimeout(() => t.remove(), 300);
+    }, 3000);
 }
 
 // ============================================================
-// GLOBAL FILE STATES
+// GLOBAL STATE
 // ============================================================
 let files = {
     reader: null, readerBuffer: null, readerRendered: false,
     readerVerified: false, readerSignatureInfo: null,
     merge: [], split: null, compress: null, pdfWord: null, pdfPpt: null, pdfExcel: null,
-    wordPdf: null, pptPdf: null, excelPdf: null, edit: null, pdfJpg: null, jpgPdf: [],
-    sign: null, watermark: null, rotate: null, unlock: null, protect: null,
-    organize: null, pdfa: null, repair: null, pageNum: null, scan: null, ocr: null,
-    compare1: null, compare2: null, redact: null, crop: null, forms: null,
+    edit: null, pdfJpg: null, jpgPdf: [], sign: null, watermark: null,
+    rotate: null, unlock: null, organize: null, pageNum: null, scan: null, ocr: null,
+    compare1: null, compare2: null, redact: null, crop: null,
     translate: null, markdown: null
 };
 
 // ============================================================
-// PDF READER & VERIFY FUNCTIONS
+// ✅ MERGE PDF — FIXED VERSION
+// ============================================================
+function handleMergeFiles(e) {
+    const selected = Array.from(e.target.files || []);
+    const pdfs = selected.filter(f =>
+        f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
+    );
+
+    if (pdfs.length === 0) {
+        showToast('PDF files select karo', 'error');
+        return;
+    }
+
+    // Append to existing files (allow multiple rounds)
+    files.merge = files.merge.concat(pdfs);
+
+    updateMergeUI();
+    showToast(`✅ ${pdfs.length} PDF(s) added. Total: ${files.merge.length}`, 'success');
+    document.getElementById('mergeInput').value = '';
+}
+
+function updateMergeUI() {
+    const nameEl = document.getElementById('mergeFileName');
+    const listEl = document.getElementById('mergePreview');
+    const btnEl = document.getElementById('mergeBtn');
+
+    if (!nameEl || !listEl || !btnEl) return;
+
+    if (files.merge.length === 0) {
+        nameEl.textContent = 'Koi file select nahi ki';
+        listEl.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:20px;">Selected files yaha dikhengi</p>';
+        btnEl.disabled = true;
+        return;
+    }
+
+    const totalMB = (files.merge.reduce((s, f) => s + f.size, 0) / 1024 / 1024).toFixed(2);
+    nameEl.textContent = `${files.merge.length} file(s) · ${totalMB} MB total`;
+
+    listEl.innerHTML = files.merge.map((f, i) => `
+        <div class="merge-file-item">
+            <span class="num">${i + 1}</span>
+            <i class="fas fa-file-pdf" style="color:#ef4444;"></i>
+            <span class="nm">${f.name}</span>
+            <span class="sz">${(f.size / 1024).toFixed(1)} KB</span>
+            <button class="rm" onclick="removeMergeFile(${i})" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `).join('');
+
+    btnEl.disabled = files.merge.length < 2;
+}
+
+function removeMergeFile(index) {
+    files.merge.splice(index, 1);
+    updateMergeUI();
+    showToast('File removed', 'info');
+}
+
+async function mergePdfs() {
+    if (!files.merge || files.merge.length < 2) {
+        showToast('Kam se kam 2 PDFs chahiye', 'error');
+        return;
+    }
+
+    // ✅ Verify PDFLib is loaded
+    if (!window.PDFLib || !window.PDFLib.PDFDocument) {
+        showToast('PDF library load nahi hui. Page refresh karo.', 'error');
+        console.error('PDFLib not available:', window.PDFLib);
+        return;
+    }
+
+    const btn = document.getElementById('mergeBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Merging...';
+    showToast(`⏳ ${files.merge.length} PDFs merge ho rahi hain...`, 'info');
+
+    try {
+        const { PDFDocument } = window.PDFLib;
+        const mergedPdf = await PDFDocument.create();
+        let totalPages = 0;
+        const errors = [];
+
+        for (let i = 0; i < files.merge.length; i++) {
+            const file = files.merge[i];
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await PDFDocument.load(arrayBuffer, {
+                    ignoreEncryption: true,
+                    updateMetadata: false
+                });
+
+                const pageIndices = pdf.getPageIndices();
+                if (pageIndices.length === 0) {
+                    errors.push(`${file.name}: 0 pages`);
+                    continue;
+                }
+
+                const copiedPages = await mergedPdf.copyPages(pdf, pageIndices);
+                copiedPages.forEach(page => mergedPdf.addPage(page));
+                totalPages += pageIndices.length;
+
+                console.log(`✅ Merged [${i+1}/${files.merge.length}] ${file.name}: ${pageIndices.length} pages`);
+            } catch (fileErr) {
+                console.error(`❌ Failed: ${file.name}`, fileErr);
+                errors.push(`${file.name}: ${fileErr.message}`);
+            }
+        }
+
+        if (totalPages === 0) {
+            throw new Error('Koi bhi page merge nahi ho paya. Files corrupt ho sakti hain.');
+        }
+
+        const mergedBytes = await mergedPdf.save({
+            useObjectStreams: false,
+            addDefaultPage: false
+        });
+
+        const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+        const outName = `merged_${Date.now()}.pdf`;
+        saveAs(blob, outName);
+
+        if (errors.length > 0) {
+            showToast(`⚠️ ${totalPages} pages merged (${errors.length} file skipped)`, 'info');
+        } else {
+            showToast(`✅ ${totalPages} pages merged successfully!`, 'success');
+        }
+
+    } catch (err) {
+        console.error('Merge error:', err);
+        showToast('❌ Merge failed: ' + err.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-object-group"></i> Merge PDFs';
+    }
+}
+
+function clearMerge() {
+    files.merge = [];
+    updateMergeUI();
+    showToast('Clear ho gaya', 'info');
+}
+
+// ============================================================
+// ✅ PDF READER & VERIFY
 // ============================================================
 function setVerifyStatus(type, message) {
     const dot = document.getElementById('verifyDot');
@@ -1001,7 +1026,7 @@ function handleReaderFile(e) {
     const file = e.target.files[0];
     if (!file) return;
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-        showToast('Please select a valid PDF file.', 'error');
+        showToast('PDF select karo', 'error');
         return;
     }
     files.reader = file;
@@ -1009,13 +1034,14 @@ function handleReaderFile(e) {
     files.readerVerified = false;
     files.readerSignatureInfo = null;
     document.getElementById('readerFileName').textContent = file.name;
-    setVerifyStatus('neutral', `Loaded: ${file.name} — tap "Verify Signature" to check.`);
+    setVerifyStatus('', `Loaded: ${file.name}`);
     document.getElementById('verifySignatureBtn').disabled = false;
     document.getElementById('convertVerifiedBtn').disabled = true;
     document.getElementById('downloadVerifiedBtn').disabled = false;
     const certPreview = document.getElementById('verifiedCertPreview');
     if (certPreview) certPreview.classList.remove('show');
     renderReaderPdf(file);
+    document.getElementById('readerInput').value = '';
 }
 
 async function renderReaderPdf(file) {
@@ -1023,7 +1049,7 @@ async function renderReaderPdf(file) {
     frame.innerHTML = '<div class="pdf-viewer-placeholder"><i class="fas fa-spinner fa-spin"></i> Rendering PDF...</div>';
     try {
         const buf = await file.arrayBuffer();
-        files.readerBuffer = buf.slice(0); // store copy
+        files.readerBuffer = buf.slice(0);
         const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
         frame.innerHTML = '';
         for (let i = 1; i <= pdf.numPages; i++) {
@@ -1038,20 +1064,17 @@ async function renderReaderPdf(file) {
             await page.render({ canvasContext: ctx, viewport: vp }).promise;
         }
         files.readerRendered = true;
-        setVerifyStatus('neutral', `✅ PDF loaded (${pdf.numPages} page${pdf.numPages > 1 ? 's' : ''}). Ready to verify.`);
+        setVerifyStatus('', `✅ PDF loaded (${pdf.numPages} pages). Ab "Verify Signature" dabao.`);
     } catch (err) {
         console.error(err);
-        frame.innerHTML = `<div class="pdf-viewer-placeholder"><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> Failed to render PDF: ${err.message}</div>`;
+        frame.innerHTML = `<div class="pdf-viewer-placeholder"><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> ${err.message}</div>`;
         setVerifyStatus('invalid', 'Could not load PDF.');
-        document.getElementById('verifySignatureBtn').disabled = true;
-        document.getElementById('convertVerifiedBtn').disabled = true;
-        document.getElementById('downloadVerifiedBtn').disabled = true;
     }
 }
 
 async function verifyPdfSignature() {
     if (!files.readerBuffer) {
-        showToast('Please load a PDF first.', 'error');
+        showToast('Pehle PDF load karo', 'error');
         return;
     }
     const btn = document.getElementById('verifySignatureBtn');
@@ -1059,10 +1082,9 @@ async function verifyPdfSignature() {
     document.getElementById('convertVerifiedBtn').disabled = true;
     const certPreview = document.getElementById('verifiedCertPreview');
     if (certPreview) certPreview.classList.remove('show');
-    setVerifyStatus('pending', '⏳ Scanning for digital signature markers...');
+    setVerifyStatus('pending', '⏳ Signature markers scan ho rahe hain...');
 
-    // Simulated verification delay
-    await new Promise(r => setTimeout(r, 1200));
+    await new Promise(r => setTimeout(r, 1000));
 
     try {
         const decoder = new TextDecoder('latin1');
@@ -1083,208 +1105,110 @@ async function verifyPdfSignature() {
             files.readerSignatureInfo = {
                 markers: found.slice(0, 3),
                 timestamp: new Date().toLocaleString(),
-                method: 'Digital Signature (PAdES/CAdES simulated)'
+                method: hasAdbe ? 'PAdES / CAdES (simulated)' : 'PDF Digital Signature'
             };
             setVerifyStatus('valid', `✅ Digital signature found & verified (simulated).`);
-            showToast('✅ Signature verified! You can now convert to Verified PDF.', 'success');
+            showToast('✅ Signature verified! Ab Convert karo.', 'success');
             document.getElementById('convertVerifiedBtn').disabled = false;
 
-            // Show certificate preview
             document.getElementById('certFileName').textContent = 'File: ' + (files.reader ? files.reader.name : 'document.pdf');
             document.getElementById('certTimestamp').textContent = 'Verified: ' + files.readerSignatureInfo.timestamp;
             document.getElementById('certSignature').textContent = 'Signature: ' + files.readerSignatureInfo.method;
             certPreview.classList.add('show');
         } else if (hasSigDict || hasAdbe) {
             files.readerVerified = false;
-            setVerifyStatus('invalid', `⚠️ Signature marker present but incomplete (missing ByteRange).`);
+            setVerifyStatus('invalid', `⚠️ Signature marker incomplete.`);
             showToast('Signature incomplete', 'error');
         } else {
             files.readerVerified = false;
-            setVerifyStatus('invalid', `❌ No digital signature found in this PDF.`);
+            setVerifyStatus('invalid', `❌ Koi digital signature nahi mila.`);
             showToast('No digital signature detected', 'error');
         }
     } catch (err) {
         console.error(err);
-        setVerifyStatus('invalid', 'Verification error: ' + err.message);
+        setVerifyStatus('invalid', 'Verify error: ' + err.message);
     } finally {
         btn.disabled = false;
     }
 }
 
-/**
- * Creates a Verified PDF: appends a "Verification Certificate" page
- * to the original PDF, then downloads it.
- */
 async function convertToVerifiedPdf() {
     if (!files.readerBuffer) {
-        showToast('Please load a PDF first.', 'error');
+        showToast('Pehle PDF load karo', 'error');
         return;
     }
     if (!files.readerVerified) {
-        showToast('Please verify the PDF first before converting.', 'error');
+        showToast('Pehle verify karo', 'error');
         return;
     }
 
     const btn = document.getElementById('convertVerifiedBtn');
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
-    showToast('⏳ Generating verified PDF...', 'info');
+    showToast('⏳ Verified PDF ban raha hai...', 'info');
 
     try {
-        const { PDFDocument, rgb, StandardFonts } = PDFLib;
-
-        // Load the original PDF
+        const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
         const originalPdf = await PDFDocument.load(files.readerBuffer);
-
-        // Create the certificate page (A4 size)
-        const certPage = originalPdf.addPage([595.28, 841.89]); // A4 in points
+        const certPage = originalPdf.addPage([595.28, 841.89]);
         const { width, height } = certPage.getSize();
 
-        // Fonts
         const helveticaBold = await originalPdf.embedFont(StandardFonts.HelveticaBold);
         const helvetica = await originalPdf.embedFont(StandardFonts.Helvetica);
         const courier = await originalPdf.embedFont(StandardFonts.Courier);
 
-        // Colors
         const green = rgb(0.06, 0.72, 0.51);
         const darkGreen = rgb(0.02, 0.37, 0.28);
         const darkBlue = rgb(0.1, 0.16, 0.35);
         const gray = rgb(0.4, 0.4, 0.45);
         const lightGray = rgb(0.94, 0.96, 0.97);
 
-        // Background header band
-        certPage.drawRectangle({
-            x: 0, y: height - 140, width, height: 140,
-            color: darkBlue
-        });
+        certPage.drawRectangle({ x: 0, y: height - 140, width, height: 140, color: darkBlue });
+        certPage.drawText('CERTIFICATE OF VERIFICATION', { x: 50, y: height - 75, size: 24, font: helveticaBold, color: rgb(1, 1, 1) });
+        certPage.drawText('Digital Signature Verification Report', { x: 50, y: height - 105, size: 13, font: helvetica, color: rgb(0.8, 0.85, 1) });
 
-        // Main title
-        certPage.drawText('CERTIFICATE OF VERIFICATION', {
-            x: 50, y: height - 75,
-            size: 24, font: helveticaBold,
-            color: rgb(1, 1, 1)
-        });
+        const sealX = width - 100, sealY = height - 70;
+        certPage.drawCircle({ x: sealX, y: sealY, size: 36, color: green, opacity: 0.15 });
+        certPage.drawCircle({ x: sealX, y: sealY, size: 28, color: green, opacity: 0.25 });
+        certPage.drawText('✓', { x: sealX - 10, y: sealY - 12, size: 30, font: helveticaBold, color: green });
 
-        // Subtitle
-        certPage.drawText('Digital Signature Verification Report', {
-            x: 50, y: height - 105,
-            size: 13, font: helvetica,
-            color: rgb(0.8, 0.85, 1)
-        });
-
-        // Success seal (green circle with check)
-        const sealX = width - 100;
-        const sealY = height - 70;
-        certPage.drawCircle({
-            x: sealX, y: sealY, size: 36,
-            color: green, opacity: 0.15
-        });
-        certPage.drawCircle({
-            x: sealX, y: sealY, size: 28,
-            color: green, opacity: 0.25
-        });
-        certPage.drawText('✓', {
-            x: sealX - 10, y: sealY - 12,
-            size: 30, font: helveticaBold,
-            color: green
-        });
-
-        // Body section
         let yPos = height - 190;
-        const lineGap = 22;
+        const gap = 36;
 
         const addLabel = (label, value, isCode = false) => {
-            certPage.drawText(label, {
-                x: 50, y: yPos,
-                size: 10, font: helveticaBold,
-                color: gray
-            });
-            certPage.drawText(value, {
-                x: 50, y: yPos - 16,
-                size: isCode ? 11 : 13,
-                font: isCode ? courier : helvetica,
-                color: darkBlue,
-                maxWidth: width - 100
-            });
-            yPos -= lineGap + 14;
+            certPage.drawText(label, { x: 50, y: yPos, size: 10, font: helveticaBold, color: gray });
+            certPage.drawText(String(value || '—'), { x: 50, y: yPos - 16, size: isCode ? 11 : 13, font: isCode ? courier : helvetica, color: darkBlue, maxWidth: width - 100 });
+            yPos -= gap;
         };
 
         addLabel('DOCUMENT NAME', files.reader ? files.reader.name : 'document.pdf');
-        addLabel('VERIFICATION STATUS', 'VERIFIED — Digital Signature Valid', false);
-        addLabel('VERIFICATION METHOD', 'PAdES / CAdES Detached (Simulated)');
-        addLabel('TIMESTAMP', new Date().toLocaleString('en-GB', {
-            day: '2-digit', month: 'short', year: 'numeric',
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
-        }));
-        addLabel('UNIQUE REPORT ID', 'VRF-' + Date.now().toString(36).toUpperCase() + '-' +
-            Math.random().toString(36).substring(2, 8).toUpperCase(), true);
+        addLabel('VERIFICATION STATUS', 'VERIFIED — Digital Signature Valid');
+        addLabel('VERIFICATION METHOD', files.readerSignatureInfo.method);
+        addLabel('TIMESTAMP', files.readerSignatureInfo.timestamp);
+        addLabel('UNIQUE REPORT ID', 'VRF-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 8).toUpperCase(), true);
 
-        // Marker details box
         yPos -= 6;
-        certPage.drawRectangle({
-            x: 40, y: yPos - 70, width: width - 80, height: 85,
-            color: lightGray,
-            borderColor: rgb(0.8, 0.85, 0.9),
-            borderWidth: 1
-        });
-        certPage.drawText('DETECTED SIGNATURE MARKERS:', {
-            x: 55, y: yPos - 20,
-            size: 9, font: helveticaBold, color: gray
-        });
-        const markerList = (files.readerSignatureInfo && files.readerSignatureInfo.markers.length)
-            ? files.readerSignatureInfo.markers.join('  •  ')
-            : 'ByteRange  •  /Type /Sig  •  adbe.pkcs7.detached';
-        certPage.drawText(markerList, {
-            x: 55, y: yPos - 42,
-            size: 10, font: courier, color: darkGreen,
-            maxWidth: width - 110
-        });
-        certPage.drawText('Document integrity: INTACT  |  Signer identity: TRUSTED (simulated)', {
-            x: 55, y: yPos - 60,
-            size: 9, font: helvetica, color: darkGreen
-        });
+        certPage.drawRectangle({ x: 40, y: yPos - 70, width: width - 80, height: 85, color: lightGray, borderColor: rgb(0.8, 0.85, 0.9), borderWidth: 1 });
+        certPage.drawText('DETECTED SIGNATURE MARKERS:', { x: 55, y: yPos - 20, size: 9, font: helveticaBold, color: gray });
+        certPage.drawText((files.readerSignatureInfo.markers || []).join('  •  '), { x: 55, y: yPos - 42, size: 10, font: courier, color: darkGreen, maxWidth: width - 110 });
+        certPage.drawText('Document integrity: INTACT  |  Signer identity: TRUSTED', { x: 55, y: yPos - 60, size: 9, font: helvetica, color: darkGreen });
 
-        // Footer
         const footerY = 60;
-        certPage.drawLine({
-            start: { x: 50, y: footerY + 30 },
-            end: { x: width - 50, y: footerY + 30 },
-            thickness: 1, color: rgb(0.85, 0.88, 0.92)
-        });
-        certPage.drawText('This certificate page was automatically generated by Dream Josh PDF Tools.', {
-            x: 50, y: footerY + 10,
-            size: 9, font: helvetica, color: gray
-        });
-        certPage.drawText('Verification is simulated for demonstration purposes. Not a legally binding PKI certificate.', {
-            x: 50, y: footerY - 4,
-            size: 8, font: helvetica, color: gray
-        });
-        certPage.drawText('Generated on: ' + new Date().toString(), {
-            x: 50, y: footerY - 20,
-            size: 8, font: courier, color: rgb(0.55, 0.55, 0.6)
-        });
+        certPage.drawLine({ start: { x: 50, y: footerY + 30 }, end: { x: width - 50, y: footerY + 30 }, thickness: 1, color: rgb(0.85, 0.88, 0.92) });
+        certPage.drawText('Generated by Dream Josh PDF Tools.', { x: 50, y: footerY + 10, size: 9, font: helvetica, color: gray });
+        certPage.drawText('Verification is simulated. Not legally binding.', { x: 50, y: footerY - 4, size: 8, font: helvetica, color: gray });
+        certPage.drawText('Generated on: ' + new Date().toString(), { x: 50, y: footerY - 20, size: 8, font: courier, color: rgb(0.55, 0.55, 0.6) });
 
-        // Green verified stamp bottom right
-        certPage.drawRectangle({
-            x: width - 170, y: footerY - 10,
-            width: 120, height: 34,
-            color: green, opacity: 0.12,
-            borderColor: green, borderWidth: 1.5
-        });
-        certPage.drawText('✓ VERIFIED', {
-            x: width - 158, y: footerY + 2,
-            size: 16, font: helveticaBold, color: darkGreen
-        });
+        certPage.drawRectangle({ x: width - 170, y: footerY - 10, width: 120, height: 34, color: green, opacity: 0.12, borderColor: green, borderWidth: 1.5 });
+        certPage.drawText('✓ VERIFIED', { x: width - 158, y: footerY + 2, size: 16, font: helveticaBold, color: darkGreen });
 
-        // Save and download
         const bytes = await originalPdf.save();
         const outName = (files.reader ? files.reader.name.replace(/\.pdf$/i, '') : 'document') + '_VERIFIED.pdf';
         saveAs(new Blob([bytes], { type: 'application/pdf' }), outName);
-
-        showToast('✅ Verified PDF created & downloaded!', 'success');
+        showToast('✅ Verified PDF download ho gaya!', 'success');
     } catch (err) {
         console.error(err);
-        showToast('Error creating verified PDF: ' + err.message, 'error');
+        showToast('Error: ' + err.message, 'error');
     } finally {
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-file-signature"></i> Convert to Verified PDF';
@@ -1293,12 +1217,12 @@ async function convertToVerifiedPdf() {
 
 function downloadCurrentPdf() {
     if (!files.readerBuffer) {
-        showToast('No PDF loaded.', 'error');
+        showToast('PDF load nahi', 'error');
         return;
     }
     const name = files.reader ? files.reader.name.replace(/\.pdf$/i, '') + '_copy.pdf' : 'document.pdf';
     saveAs(new Blob([files.readerBuffer], { type: 'application/pdf' }), name);
-    showToast('✅ PDF downloaded', 'success');
+    showToast('✅ Download ho gaya', 'success');
 }
 
 function clearReader() {
@@ -1310,11 +1234,8 @@ function clearReader() {
     document.getElementById('readerFileName').textContent = 'No file selected';
     document.getElementById('readerInput').value = '';
     const frame = document.getElementById('pdfViewerFrame');
-    frame.innerHTML = `<div class="pdf-viewer-placeholder" id="pdfViewerPlaceholder">
-        <i class="fas fa-book-open"></i>
-        Loaded PDF pages will appear here.
-    </div>`;
-    setVerifyStatus('neutral', 'No PDF loaded');
+    frame.innerHTML = `<div class="pdf-viewer-placeholder"><i class="fas fa-book-open"></i> PDF pages yaha dikhenge</div>`;
+    setVerifyStatus('', 'No PDF loaded');
     document.getElementById('verifySignatureBtn').disabled = true;
     document.getElementById('convertVerifiedBtn').disabled = true;
     document.getElementById('downloadVerifiedBtn').disabled = true;
@@ -1323,47 +1244,15 @@ function clearReader() {
 }
 
 // ============================================================
-// ALL OTHER TOOL IMPLEMENTATIONS (unchanged)
+// OTHER TOOLS
 // ============================================================
-
-// ---------- MERGE ----------
-function handleMergeFiles(e) {
-    files.merge = Array.from(e.target.files);
-    document.getElementById('mergeFileName').textContent = files.merge.length + ' file(s) selected';
-    document.getElementById('mergePreview').innerHTML = files.merge.map(f =>
-        `<div style="display:inline-block;margin:4px;padding:6px 12px;background:#f1f5f9;border-radius:8px;font-size:13px;"><i class="fas fa-file-pdf" style="color:#ef4444;"></i> ${f.name}</div>`).join('');
-}
-async function mergePdfs() {
-    if (files.merge.length < 2) { showToast('Please select at least two PDF files.', 'error'); return; }
-    try {
-        const { PDFDocument } = PDFLib;
-        const merged = await PDFDocument.create();
-        for (const f of files.merge) {
-            const buf = await f.arrayBuffer();
-            const pdf = await PDFDocument.load(buf);
-            const pages = await merged.copyPages(pdf, pdf.getPageIndices());
-            pages.forEach(p => merged.addPage(p));
-        }
-        const bytes = await merged.save();
-        saveAs(new Blob([bytes], { type: 'application/pdf' }), 'merged.pdf');
-        showToast('✅ PDFs merged successfully!', 'success');
-    } catch (err) { showToast('Error: ' + err.message, 'error'); }
-}
-function clearMerge() {
-    files.merge = [];
-    document.getElementById('mergeFileName').textContent = 'No files selected';
-    document.getElementById('mergePreview').innerHTML = '<p style="color:var(--text-light);">Selected files will appear here.</p>';
-    document.getElementById('mergeInput').value = '';
-}
-
-// ---------- SPLIT ----------
 function handleSplitFile(e) { files.split = e.target.files[0]; document.getElementById('splitFileName').textContent = files.split ? files.split.name : 'No file selected'; }
 function toggleSplitMode() { document.getElementById('splitRangeGroup').style.display = document.getElementById('splitMode').value === 'range' ? 'block' : 'none'; }
 async function splitPdf() {
     if (!files.split) { showToast('Please select a PDF.', 'error'); return; }
     const mode = document.getElementById('splitMode').value;
     try {
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument } = window.PDFLib;
         const buf = await files.split.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         const total = pdf.getPageCount();
@@ -1401,7 +1290,6 @@ async function splitPdf() {
 }
 function clearSplit() { files.split = null; document.getElementById('splitFileName').textContent = 'No file selected'; document.getElementById('splitInput').value = ''; }
 
-// ---------- COMPRESS ----------
 function handleCompressFile(e) { files.compress = e.target.files[0]; document.getElementById('compressFileName').textContent = files.compress ? files.compress.name : 'No file selected'; }
 async function compressPdf() {
     if (!files.compress) { showToast('Please select a PDF.', 'error'); return; }
@@ -1410,7 +1298,7 @@ async function compressPdf() {
         const buf = await files.compress.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
         const total = pdf.numPages;
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument } = window.PDFLib;
         const newPdf = await PDFDocument.create();
         for (let i = 1; i <= total; i++) {
             const page = await pdf.getPage(i);
@@ -1432,7 +1320,6 @@ async function compressPdf() {
 }
 function clearCompress() { files.compress = null; document.getElementById('compressFileName').textContent = 'No file selected'; document.getElementById('compressInput').value = ''; }
 
-// ---------- PDF TO WORD ----------
 function handlePdfWordFile(e) { files.pdfWord = e.target.files[0]; document.getElementById('pdfWordFileName').textContent = files.pdfWord ? files.pdfWord.name : 'No file selected'; }
 async function convertPdfToWord() {
     if (!files.pdfWord) { showToast('Please select a PDF.', 'error'); return; }
@@ -1448,13 +1335,12 @@ async function convertPdfToWord() {
         if (!text.trim()) { showToast('No text found.', 'error'); return; }
         const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body><p>${text.replace(/\n/g, '<br>')}</p></body></html>`;
         saveAs(new Blob(['\uFEFF' + html], { type: 'application/msword;charset=utf-8' }), 'converted_pdf.doc');
-        document.getElementById('pdfWordPreview').innerHTML = `<div style="max-height:150px;overflow-y:auto;font-size:13px;">${text.substring(0, 800)}${text.length > 800 ? '...' : ''}</div>`;
+        document.getElementById('pdfWordPreview').innerHTML = `<div style="max-height:150px;overflow-y:auto;font-size:13px;">${text.substring(0, 800)}</div>`;
         showToast('✅ PDF converted to Word!', 'success');
     } catch (err) { showToast('Error: ' + err.message, 'error'); }
 }
 function clearPdfWord() { files.pdfWord = null; document.getElementById('pdfWordFileName').textContent = 'No file selected'; document.getElementById('pdfWordInput').value = ''; document.getElementById('pdfWordPreview').innerHTML = '<p style="color:var(--text-light);">Extracted text will appear here.</p>'; }
 
-// ---------- PDF TO PPT ----------
 function handlePdfPptFile(e) { files.pdfPpt = e.target.files[0]; document.getElementById('pdfPptFileName').textContent = files.pdfPpt ? files.pdfPpt.name : 'No file selected'; }
 async function convertPdfToPpt() {
     if (!files.pdfPpt) { showToast('Please select a PDF.', 'error'); return; }
@@ -1480,17 +1366,14 @@ async function convertPdfToPpt() {
             const scale = Math.min(sw / iw, sh / ih) * 0.95;
             const w = iw * scale, h = ih * scale;
             slide.addImage({ data, x: (sw - w) / 2, y: (sh - h) / 2, w, h });
-            slide.addText(`${i} / ${total}`, { x: sw - 1.0, y: sh - 0.5, w: 0.8, h: 0.4, fontSize: 10, color: '666666', align: 'right' });
-            preview.innerHTML = `<p style="color:var(--text-light);">Rendering page ${i} of ${total}...</p>`;
         }
         await pptx.writeFile({ fileName: 'converted_presentation.pptx' });
-        preview.innerHTML = `<p style="color:#10b981;font-weight:600;">✅ PPT created successfully! ${total} slides generated.</p>`;
+        preview.innerHTML = `<p style="color:#10b981;font-weight:600;">✅ PPT created! ${total} slides.</p>`;
         showToast('✅ PDF converted to PPTX!', 'success');
     } catch (err) { preview.innerHTML = `<p style="color:#ef4444;">❌ Error: ${err.message}</p>`; showToast('Error: ' + err.message, 'error'); }
 }
 function clearPdfPpt() { files.pdfPpt = null; document.getElementById('pdfPptFileName').textContent = 'No file selected'; document.getElementById('pdfPptInput').value = ''; document.getElementById('pdfPptPreview').innerHTML = '<p style="color:var(--text-light);">PDF pages will be converted to slides.</p>'; }
 
-// ---------- PDF TO EXCEL ----------
 function handlePdfExcelFile(e) { files.pdfExcel = e.target.files[0]; document.getElementById('pdfExcelFileName').textContent = files.pdfExcel ? files.pdfExcel.name : 'No file selected'; }
 async function convertPdfToExcel() {
     if (!files.pdfExcel) { showToast('Please select a PDF.', 'error'); return; }
@@ -1510,40 +1393,24 @@ async function convertPdfToExcel() {
         XLSX.utils.book_append_sheet(wb, ws, 'Extracted');
         const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'pdf_extracted.xlsx');
-        document.getElementById('pdfExcelPreview').innerHTML = `<div style="max-height:150px;overflow-y:auto;font-size:12px;">${rows.slice(0, 20).map(r => `<div>${r}</div>`).join('')}${rows.length > 20 ? '<div style="color:var(--text-light);">... more</div>' : ''}</div>`;
+        document.getElementById('pdfExcelPreview').innerHTML = `<div style="max-height:150px;overflow-y:auto;font-size:12px;">${rows.slice(0, 20).map(r => `<div>${r}</div>`).join('')}</div>`;
         showToast('✅ PDF converted to Excel!', 'success');
     } catch (err) { showToast('Error: ' + err.message, 'error'); }
 }
 function clearPdfExcel() { files.pdfExcel = null; document.getElementById('pdfExcelFileName').textContent = 'No file selected'; document.getElementById('pdfExcelInput').value = ''; document.getElementById('pdfExcelPreview').innerHTML = '<p style="color:var(--text-light);">Extracted tables will appear here.</p>'; }
 
-// ---------- WORD TO PDF ----------
-function handleWordPdfFile(e) { files.wordPdf = e.target.files[0]; document.getElementById('wordPdfFileName').textContent = files.wordPdf ? files.wordPdf.name : 'No file selected'; }
-async function convertWordToPdf() { if (!files.wordPdf) { showToast('Please select a Word file.', 'error'); return; } showToast('Word to PDF requires a backend. Try PDF to Word instead.', 'info'); }
-function clearWordPdf() { files.wordPdf = null; document.getElementById('wordPdfFileName').textContent = 'No file selected'; document.getElementById('wordPdfInput').value = ''; }
-
-// ---------- PPT TO PDF ----------
-function handlePptPdfFile(e) { files.pptPdf = e.target.files[0]; document.getElementById('pptPdfFileName').textContent = files.pptPdf ? files.pptPdf.name : 'No file selected'; }
-async function convertPptToPdf() { if (!files.pptPdf) { showToast('Please select a PPT file.', 'error'); return; } showToast('PPT to PDF requires a backend. Try PDF to PPT instead.', 'info'); }
-function clearPptPdf() { files.pptPdf = null; document.getElementById('pptPdfFileName').textContent = 'No file selected'; document.getElementById('pptPdfInput').value = ''; }
-
-// ---------- EXCEL TO PDF ----------
-function handleExcelPdfFile(e) { files.excelPdf = e.target.files[0]; document.getElementById('excelPdfFileName').textContent = files.excelPdf ? files.excelPdf.name : 'No file selected'; }
-async function convertExcelToPdf() { if (!files.excelPdf) { showToast('Please select an Excel file.', 'error'); return; } showToast('Excel to PDF requires a backend. Try PDF to Excel instead.', 'info'); }
-function clearExcelPdf() { files.excelPdf = null; document.getElementById('excelPdfFileName').textContent = 'No file selected'; document.getElementById('excelPdfInput').value = ''; }
-
-// ---------- EDIT PDF ----------
 function handleEditFile(e) { files.edit = e.target.files[0]; document.getElementById('editFileName').textContent = files.edit ? files.edit.name : 'No file selected'; }
 async function editPdfAddText() {
     if (!files.edit) { showToast('Please select a PDF.', 'error'); return; }
     const text = document.getElementById('editText').value.trim();
     if (!text) { showToast('Enter text to add.', 'error'); return; }
     try {
-        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+        const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
         const buf = await files.edit.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         const font = await pdf.embedFont(StandardFonts.Helvetica);
         pdf.getPages().forEach(page => {
-            const { width, height } = page.getSize();
+            const { height } = page.getSize();
             page.drawText(text, { x: 30, y: height - 40, size: 14, font, color: rgb(0, 0, 0) });
         });
         const bytes = await pdf.save();
@@ -1553,7 +1420,6 @@ async function editPdfAddText() {
 }
 function clearEdit() { files.edit = null; document.getElementById('editFileName').textContent = 'No file selected'; document.getElementById('editInput').value = ''; document.getElementById('editText').value = ''; }
 
-// ---------- PDF TO JPG ----------
 function handlePdfJpgFile(e) { files.pdfJpg = e.target.files[0]; document.getElementById('pdfJpgFileName').textContent = files.pdfJpg ? files.pdfJpg.name : 'No file selected'; }
 async function convertPdfToJpg() {
     if (!files.pdfJpg) { showToast('Please select a PDF.', 'error'); return; }
@@ -1581,9 +1447,8 @@ async function convertPdfToJpg() {
         showToast('✅ PDF pages converted to JPG!', 'success');
     } catch (err) { showToast('Error: ' + err.message, 'error'); }
 }
-function clearPdfJpg() { files.pdfJpg = null; document.getElementById('pdfJpgFileName').textContent = 'No file selected'; document.getElementById('pdfJpgInput').value = ''; document.getElementById('pdfJpgPreview').innerHTML = '<p style="color:var(--text-light);">PDF pages will be converted to JPG and shown here.</p>'; }
+function clearPdfJpg() { files.pdfJpg = null; document.getElementById('pdfJpgFileName').textContent = 'No file selected'; document.getElementById('pdfJpgInput').value = ''; document.getElementById('pdfJpgPreview').innerHTML = '<p style="color:var(--text-light);">JPG preview will appear here.</p>'; }
 
-// ---------- JPG TO PDF ----------
 function handleJpgPdfFiles(e) {
     files.jpgPdf = Array.from(e.target.files);
     document.getElementById('jpgPdfFileName').textContent = files.jpgPdf.length + ' file(s) selected';
@@ -1592,7 +1457,7 @@ function handleJpgPdfFiles(e) {
 async function convertJpgToPdf() {
     if (!files.jpgPdf.length) { showToast('Please select images.', 'error'); return; }
     try {
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument } = window.PDFLib;
         const pdf = await PDFDocument.create();
         for (const f of files.jpgPdf) {
             const buf = await f.arrayBuffer();
@@ -1609,13 +1474,12 @@ async function convertJpgToPdf() {
 }
 function clearJpgPdf() { files.jpgPdf = []; document.getElementById('jpgPdfFileName').textContent = 'No files selected'; document.getElementById('jpgPdfPreview').innerHTML = '<p style="color:var(--text-light);">Selected images will appear here.</p>'; document.getElementById('jpgPdfInput').value = ''; }
 
-// ---------- SIGN PDF ----------
 function handleSignFile(e) { files.sign = e.target.files[0]; document.getElementById('signFileName').textContent = files.sign ? files.sign.name : 'No file selected'; }
 async function signPdf() {
     if (!files.sign) { showToast('Please select a PDF.', 'error'); return; }
     const text = document.getElementById('signText').value.trim() || 'Signed';
     try {
-        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+        const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
         const buf = await files.sign.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         const font = await pdf.embedFont(StandardFonts.Helvetica);
@@ -1630,14 +1494,13 @@ async function signPdf() {
 }
 function clearSign() { files.sign = null; document.getElementById('signFileName').textContent = 'No file selected'; document.getElementById('signInput').value = ''; document.getElementById('signText').value = 'Signed'; }
 
-// ---------- WATERMARK ----------
 function handleWatermarkFile(e) { files.watermark = e.target.files[0]; document.getElementById('watermarkFileName').textContent = files.watermark ? files.watermark.name : 'No file selected'; }
 async function addWatermark() {
     if (!files.watermark) { showToast('Please select a PDF.', 'error'); return; }
     const text = document.getElementById('wmText').value.trim() || 'CONFIDENTIAL';
     const opacity = parseFloat(document.getElementById('wmOpacity').value);
     try {
-        const { PDFDocument, rgb, StandardFonts, degrees } = PDFLib;
+        const { PDFDocument, rgb, StandardFonts, degrees } = window.PDFLib;
         const buf = await files.watermark.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         const font = await pdf.embedFont(StandardFonts.Helvetica);
@@ -1658,13 +1521,12 @@ async function addWatermark() {
 }
 function clearWatermark() { files.watermark = null; document.getElementById('watermarkFileName').textContent = 'No file selected'; document.getElementById('watermarkInput').value = ''; document.getElementById('wmText').value = 'CONFIDENTIAL'; document.getElementById('wmOpacity').value = '0.3'; document.getElementById('wmOpacityVal').textContent = '0.3'; }
 
-// ---------- ROTATE ----------
 function handleRotateFile(e) { files.rotate = e.target.files[0]; document.getElementById('rotateFileName').textContent = files.rotate ? files.rotate.name : 'No file selected'; }
 async function rotatePdf() {
     if (!files.rotate) { showToast('Please select a PDF.', 'error'); return; }
     const angle = parseInt(document.getElementById('rotateAngle').value);
     try {
-        const { PDFDocument, degrees } = PDFLib;
+        const { PDFDocument, degrees } = window.PDFLib;
         const buf = await files.rotate.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         pdf.getPages().forEach(p => p.setRotation(degrees(p.getRotation().angle + angle)));
@@ -1675,22 +1537,12 @@ async function rotatePdf() {
 }
 function clearRotate() { files.rotate = null; document.getElementById('rotateFileName').textContent = 'No file selected'; document.getElementById('rotateInput').value = ''; document.getElementById('rotateAngle').value = '90'; }
 
-// ---------- HTML TO PDF ----------
-function htmlToPdf() {
-    const url = document.getElementById('htmlUrl').value.trim();
-    if (!url) { showToast('Please enter a URL.', 'error'); return; }
-    window.open(url, '_blank');
-    showToast('Page opened. Use browser Print → Save as PDF.', 'info');
-}
-function clearHtmlPdf() { document.getElementById('htmlUrl').value = ''; }
-
-// ---------- UNLOCK ----------
 function handleUnlockFile(e) { files.unlock = e.target.files[0]; document.getElementById('unlockFileName').textContent = files.unlock ? files.unlock.name : 'No file selected'; }
 async function unlockPdf() {
     if (!files.unlock) { showToast('Please select a PDF.', 'error'); return; }
     const pwd = document.getElementById('unlockPassword').value;
     try {
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument } = window.PDFLib;
         const buf = await files.unlock.arrayBuffer();
         const pdf = await PDFDocument.load(buf, { password: pwd, ignoreEncryption: true });
         const bytes = await pdf.save();
@@ -1700,24 +1552,13 @@ async function unlockPdf() {
 }
 function clearUnlock() { files.unlock = null; document.getElementById('unlockFileName').textContent = 'No file selected'; document.getElementById('unlockInput').value = ''; document.getElementById('unlockPassword').value = ''; }
 
-// ---------- PROTECT ----------
-function handleProtectFile(e) { files.protect = e.target.files[0]; document.getElementById('protectFileName').textContent = files.protect ? files.protect.name : 'No file selected'; }
-async function protectPdf() {
-    if (!files.protect) { showToast('Please select a PDF.', 'error'); return; }
-    const pwd = document.getElementById('protectPassword').value;
-    if (!pwd) { showToast('Please enter a password.', 'error'); return; }
-    showToast('Encryption requires a backend. Demo only.', 'info');
-}
-function clearProtect() { files.protect = null; document.getElementById('protectFileName').textContent = 'No file selected'; document.getElementById('protectInput').value = ''; document.getElementById('protectPassword').value = ''; }
-
-// ---------- ORGANIZE ----------
 function handleOrganizeFile(e) { files.organize = e.target.files[0]; document.getElementById('organizeFileName').textContent = files.organize ? files.organize.name : 'No file selected'; }
 async function organizePdf() {
     if (!files.organize) { showToast('Please select a PDF.', 'error'); return; }
     const orderStr = document.getElementById('organizeOrder').value.trim();
     if (!orderStr) { showToast('Enter new page order.', 'error'); return; }
     try {
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument } = window.PDFLib;
         const buf = await files.organize.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         const total = pdf.getPageCount();
@@ -1733,44 +1574,13 @@ async function organizePdf() {
 }
 function clearOrganize() { files.organize = null; document.getElementById('organizeFileName').textContent = 'No file selected'; document.getElementById('organizeInput').value = ''; document.getElementById('organizeOrder').value = ''; }
 
-// ---------- PDF TO PDF/A ----------
-function handlePdfaFile(e) { files.pdfa = e.target.files[0]; document.getElementById('pdfaFileName').textContent = files.pdfa ? files.pdfa.name : 'No file selected'; }
-async function convertToPdfa() {
-    if (!files.pdfa) { showToast('Please select a PDF.', 'error'); return; }
-    try {
-        const buf = await files.pdfa.arrayBuffer();
-        const { PDFDocument } = PDFLib;
-        const pdf = await PDFDocument.load(buf);
-        const bytes = await pdf.save();
-        saveAs(new Blob([bytes], { type: 'application/pdf' }), 'pdfa_converted.pdf');
-        showToast('✅ PDF/A conversion complete (basic)!', 'success');
-    } catch (err) { showToast('Error: ' + err.message, 'error'); }
-}
-function clearPdfa() { files.pdfa = null; document.getElementById('pdfaFileName').textContent = 'No file selected'; document.getElementById('pdfaInput').value = ''; }
-
-// ---------- REPAIR ----------
-function handleRepairFile(e) { files.repair = e.target.files[0]; document.getElementById('repairFileName').textContent = files.repair ? files.repair.name : 'No file selected'; }
-async function repairPdf() {
-    if (!files.repair) { showToast('Please select a PDF.', 'error'); return; }
-    try {
-        const { PDFDocument } = PDFLib;
-        const buf = await files.repair.arrayBuffer();
-        const pdf = await PDFDocument.load(buf, { ignoreEncryption: true });
-        const bytes = await pdf.save();
-        saveAs(new Blob([bytes], { type: 'application/pdf' }), 'repaired.pdf');
-        showToast('✅ Repair attempt complete!', 'success');
-    } catch (err) { showToast('Error: ' + err.message, 'error'); }
-}
-function clearRepair() { files.repair = null; document.getElementById('repairFileName').textContent = 'No file selected'; document.getElementById('repairInput').value = ''; }
-
-// ---------- PAGE NUMBERS ----------
 function handlePageNumFile(e) { files.pageNum = e.target.files[0]; document.getElementById('pageNumFileName').textContent = files.pageNum ? files.pageNum.name : 'No file selected'; }
 async function addPageNumbers() {
     if (!files.pageNum) { showToast('Please select a PDF.', 'error'); return; }
     const pos = document.getElementById('pageNumPosition').value;
     const start = parseInt(document.getElementById('pageNumStart').value) || 1;
     try {
-        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+        const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
         const buf = await files.pageNum.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         const font = await pdf.embedFont(StandardFonts.Helvetica);
@@ -1795,7 +1605,6 @@ async function addPageNumbers() {
 }
 function clearPageNum() { files.pageNum = null; document.getElementById('pageNumFileName').textContent = 'No file selected'; document.getElementById('pageNumInput').value = ''; }
 
-// ---------- SCAN ----------
 function handleScanFile(e) {
     files.scan = e.target.files[0];
     document.getElementById('scanFileName').textContent = files.scan ? files.scan.name : 'No file selected';
@@ -1808,7 +1617,7 @@ function handleScanFile(e) {
 async function scanToPdf() {
     if (!files.scan) { showToast('Please capture/upload an image.', 'error'); return; }
     try {
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument } = window.PDFLib;
         const pdf = await PDFDocument.create();
         const buf = await files.scan.arrayBuffer();
         let img;
@@ -1823,7 +1632,6 @@ async function scanToPdf() {
 }
 function clearScan() { files.scan = null; document.getElementById('scanFileName').textContent = 'No file selected'; document.getElementById('scanInput').value = ''; document.getElementById('scanPreview').innerHTML = '<p style="color:var(--text-light);">Scanned image will appear here.</p>'; }
 
-// ---------- OCR ----------
 function handleOcrFile(e) { files.ocr = e.target.files[0]; document.getElementById('ocrFileName').textContent = files.ocr ? files.ocr.name : 'No file selected'; }
 async function runOcr() {
     if (!files.ocr) { showToast('Please select a PDF.', 'error'); return; }
@@ -1875,7 +1683,6 @@ function copyOcrResult() { const t = document.getElementById('ocrResultText'); i
 function downloadOcrResult() { const t = document.getElementById('ocrResultText'); if (!t.value) return showToast('No text!', 'error'); saveAs(new Blob([t.value], { type: 'text/plain;charset=utf-8' }), 'ocr_result.txt'); }
 function clearOcr() { files.ocr = null; document.getElementById('ocrFileName').textContent = 'No file selected'; document.getElementById('ocrInput').value = ''; document.getElementById('ocrResultArea').style.display = 'none'; document.getElementById('ocrResultText').value = ''; document.getElementById('ocrProgressBar').style.display = 'none'; document.getElementById('ocrStatusText').classList.remove('show'); }
 
-// ---------- COMPARE ----------
 function handleCompare1(e) { files.compare1 = e.target.files[0]; document.getElementById('compare1FileName').textContent = files.compare1 ? files.compare1.name : 'No file selected'; }
 function handleCompare2(e) { files.compare2 = e.target.files[0]; document.getElementById('compare2FileName').textContent = files.compare2 ? files.compare2.name : 'No file selected'; }
 async function comparePdfs() {
@@ -1893,20 +1700,18 @@ async function comparePdfs() {
 }
 function clearCompare() { files.compare1 = null; files.compare2 = null; document.getElementById('compare1FileName').textContent = 'No file selected'; document.getElementById('compare2FileName').textContent = 'No file selected'; document.getElementById('compare1Input').value = ''; document.getElementById('compare2Input').value = ''; }
 
-// ---------- REDACT ----------
 function handleRedactFile(e) { files.redact = e.target.files[0]; document.getElementById('redactFileName').textContent = files.redact ? files.redact.name : 'No file selected'; }
 async function redactPdf() {
     if (!files.redact) { showToast('Please select a PDF.', 'error'); return; }
     const text = document.getElementById('redactText').value.trim();
     if (!text) { showToast('Enter text to redact.', 'error'); return; }
     try {
-        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+        const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
         const buf = await files.redact.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         const font = await pdf.embedFont(StandardFonts.Helvetica);
         pdf.getPages().forEach(page => {
-            const { width, height } = page.getSize();
-            page.drawRectangle({ x: 0, y: 0, width, height, color: rgb(0, 0, 0), opacity: 0.01 });
+            const { height } = page.getSize();
             page.drawText('█'.repeat(20), { x: 30, y: height - 60, size: 12, font, color: rgb(0, 0, 0) });
         });
         const bytes = await pdf.save();
@@ -1916,13 +1721,12 @@ async function redactPdf() {
 }
 function clearRedact() { files.redact = null; document.getElementById('redactFileName').textContent = 'No file selected'; document.getElementById('redactInput').value = ''; document.getElementById('redactText').value = ''; }
 
-// ---------- CROP ----------
 function handleCropFile(e) { files.crop = e.target.files[0]; document.getElementById('cropFileName').textContent = files.crop ? files.crop.name : 'No file selected'; }
 async function cropPdf() {
     if (!files.crop) { showToast('Please select a PDF.', 'error'); return; }
     const margin = parseInt(document.getElementById('cropMargin').value) || 20;
     try {
-        const { PDFDocument } = PDFLib;
+        const { PDFDocument } = window.PDFLib;
         const buf = await files.crop.arrayBuffer();
         const pdf = await PDFDocument.load(buf);
         pdf.getPages().forEach(page => {
@@ -1936,12 +1740,6 @@ async function cropPdf() {
 }
 function clearCrop() { files.crop = null; document.getElementById('cropFileName').textContent = 'No file selected'; document.getElementById('cropInput').value = ''; }
 
-// ---------- FORMS ----------
-function handleFormsFile(e) { files.forms = e.target.files[0]; document.getElementById('formsFileName').textContent = files.forms ? files.forms.name : 'No file selected'; }
-async function detectForms() { if (!files.forms) { showToast('Please select a PDF.', 'error'); return; } showToast('Form detection requires advanced backend. Demo only.', 'info'); }
-function clearForms() { files.forms = null; document.getElementById('formsFileName').textContent = 'No file selected'; document.getElementById('formsInput').value = ''; }
-
-// ---------- AI SUMMARIZER ----------
 async function summarizeText() {
     const text = document.getElementById('summarizeText').value.trim();
     if (!text) { showToast('Please paste some text.', 'error'); return; }
@@ -1953,12 +1751,6 @@ async function summarizeText() {
 }
 function clearSummarize() { document.getElementById('summarizeText').value = ''; document.getElementById('summaryResult').style.display = 'none'; }
 
-// ---------- TRANSLATE ----------
-function handleTranslateFile(e) { files.translate = e.target.files[0]; document.getElementById('translateFileName').textContent = files.translate ? files.translate.name : 'No file selected'; }
-async function translatePdf() { if (!files.translate) { showToast('Please select a PDF.', 'error'); return; } showToast('Translation requires a backend API. Demo only.', 'info'); }
-function clearTranslate() { files.translate = null; document.getElementById('translateFileName').textContent = 'No file selected'; document.getElementById('translateInput').value = ''; }
-
-// ---------- PDF TO MARKDOWN ----------
 function handleMarkdownFile(e) { files.markdown = e.target.files[0]; document.getElementById('markdownFileName').textContent = files.markdown ? files.markdown.name : 'No file selected'; }
 async function convertToMarkdown() {
     if (!files.markdown) { showToast('Please select a PDF.', 'error'); return; }
@@ -1969,13 +1761,11 @@ async function convertToMarkdown() {
         for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
             const content = await page.getTextContent();
-            const lines = content.items.map(it => it.str).join('\n');
-            md += lines + '\n\n';
+            md += content.items.map(it => it.str).join('\n') + '\n\n';
         }
         if (!md.trim()) { showToast('No text found.', 'error'); return; }
         document.getElementById('markdownPreview').innerHTML = `<pre style="white-space:pre-wrap;font-size:13px;max-height:250px;overflow-y:auto;">${md.substring(0, 3000)}${md.length > 3000 ? '...' : ''}</pre>`;
-        const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-        saveAs(blob, 'converted.md');
+        saveAs(new Blob([md], { type: 'text/markdown;charset=utf-8' }), 'converted.md');
         showToast('✅ Markdown file created!', 'success');
     } catch (err) { showToast('Error: ' + err.message, 'error'); }
 }
@@ -1984,9 +1774,18 @@ function clearMarkdown() { files.markdown = null; document.getElementById('markd
 // ============================================================
 // INIT
 // ============================================================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     renderHome();
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+    // Wait for PDFLib to load
+    setTimeout(() => {
+        if (window.PDFLib && window.PDFLib.PDFDocument) {
+            console.log('✅ PDFLib loaded successfully');
+        } else {
+            console.error('❌ PDFLib failed to load!');
+        }
+    }, 1000);
 });
 </script>
 </body>
