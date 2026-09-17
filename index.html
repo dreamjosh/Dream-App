@@ -60,7 +60,7 @@
             gap: 20px;
         }
 
-        /* ========== TOOL CARD (CENTERED CONTENT) ========== */
+        /* ========== TOOL CARD ========== */
         .tool-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -100,13 +100,6 @@
             font-weight: 700;
             line-height: 1.3;
             color: var(--text-color);
-        }
-
-        .tool-card .card-desc {
-            font-size: 12px;
-            color: var(--text-light);
-            line-height: 1.5;
-            display: none;
         }
 
         .tool-card .badge {
@@ -241,6 +234,8 @@
         .action-row .btn-success:hover { box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35); }
         .action-row .btn-danger { background: #ef4444; }
         .action-row .btn-danger:hover { box-shadow: 0 8px 25px rgba(239, 68, 68, 0.35); }
+        .action-row .btn-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .action-row .btn-purple:hover { box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35); }
 
         .inline-row {
             display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
@@ -301,6 +296,70 @@
         }
         .info-note i { margin-top: 2px; }
 
+        /* ========== PDF READER & VERIFY STYLES ========== */
+        .pdf-viewer-frame {
+            background: #1e1e2f;
+            border-radius: 16px;
+            padding: 12px;
+            margin-top: 12px;
+            max-height: 520px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            min-height: 200px;
+        }
+        .pdf-viewer-frame .pdf-page-canvas {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        .pdf-viewer-placeholder {
+            color: #8b8ba8;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+        .pdf-viewer-placeholder i {
+            font-size: 44px;
+            margin-bottom: 12px;
+            color: #5a5a7a;
+            display: block;
+        }
+
+        .verify-status-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            background: #f8fafc;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .verify-status-bar .dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            background: #94a3b8; flex-shrink: 0; transition: 0.25s;
+        }
+        .verify-status-bar .dot.valid { background: #10b981; box-shadow: 0 0 10px #10b981; }
+        .verify-status-bar .dot.invalid { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .verify-status-bar .dot.pending { background: #f59e0b; animation: pulse 1.2s infinite; }
+        @keyframes pulse { 0%{opacity:1;} 50%{opacity:0.35;} 100%{opacity:1;} }
+
+        .badge-new {
+            background: #fffbeb; color: #f59e0b;
+            font-size: 10px; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px;
+            text-transform: uppercase; position: absolute;
+            top: 14px; right: 14px;
+        }
+
         @media (max-width: 768px) {
             .home-container { padding: 24px 16px; }
             .tools-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
@@ -311,6 +370,7 @@
             .tool-page-header { padding: 12px 16px; }
             .tool-page-header h2 { font-size: 16px; }
             .action-row button { padding: 12px 22px; font-size: 14px; }
+            .pdf-viewer-frame { max-height: 400px; }
         }
     </style>
 </head>
@@ -345,6 +405,8 @@
 // TOOLS DATA
 // ============================================================
 const TOOLS = [
+    { id: 'pdf-reader-verify', name: 'PDF Reader & Verify', icon: 'fa-book-reader', iconClass: 'icon-purple', badge: 'New',
+      desc: 'Open PDF on phone & verify digital signature.' },
     { id: 'merge-pdf', name: 'Merge PDF', icon: 'fa-object-group', iconClass: 'icon-red', badge: null,
       desc: 'Combine PDFs in the order you want.' },
     { id: 'split-pdf', name: 'Split PDF', icon: 'fa-cut', iconClass: 'icon-orange', badge: null,
@@ -410,7 +472,7 @@ const TOOLS = [
 ];
 
 // ============================================================
-// RENDER HOME GRID (CENTERED)
+// RENDER HOME GRID
 // ============================================================
 function renderHome() {
     const grid = document.getElementById('toolsGrid');
@@ -454,6 +516,48 @@ function goHome() {
 // ============================================================
 function getToolHTML(id) {
     const map = {
+        'pdf-reader-verify': `
+            <div class="form-group">
+                <label>📖 Open PDF on your phone</label>
+                <div class="upload-area" onclick="document.getElementById('readerInput').click()">
+                    <i class="fas fa-file-pdf"></i>
+                    <p>Tap to select a PDF file</p>
+                    <div class="file-name-display" id="readerFileName">No file selected</div>
+                    <input type="file" id="readerInput" accept=".pdf,application/pdf" class="hidden-input" onchange="handleReaderFile(event)">
+                </div>
+            </div>
+
+            <!-- PDF Viewer -->
+            <div class="pdf-viewer-frame" id="pdfViewerFrame">
+                <div class="pdf-viewer-placeholder" id="pdfViewerPlaceholder">
+                    <i class="fas fa-book-open"></i>
+                    Loaded PDF pages will appear here.
+                </div>
+            </div>
+
+            <!-- Verify status -->
+            <div class="verify-status-bar" id="verifyStatusBar">
+                <span class="dot" id="verifyDot"></span>
+                <span id="verifyMessage">No PDF loaded</span>
+            </div>
+
+            <div class="action-row">
+                <button class="btn-purple" id="verifySignatureBtn" onclick="verifyPdfSignature()" disabled>
+                    <i class="fas fa-signature"></i> Verify Signature
+                </button>
+                <button class="btn-success" id="downloadVerifiedBtn" onclick="downloadCurrentPdf()" disabled>
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+                <button class="btn-danger" onclick="clearReader()">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+
+            <div class="info-note">
+                <i class="fas fa-info-circle"></i>
+                <span>Signature verification is simulated: it scans the PDF for typical digital signature markers. For real PKI validation, a backend is required.</span>
+            </div>
+        `,
         'merge-pdf': `
             <div class="form-group"><label>Upload PDF files (multiple, in order)</label>
             <div class="upload-area" onclick="document.getElementById('mergeInput').click()">
@@ -815,6 +919,7 @@ function showToast(msg, type = 'info') {
 // GLOBAL FILE STATES
 // ============================================================
 let files = {
+    reader: null, readerBuffer: null, readerRendered: false,
     merge: [], split: null, compress: null, pdfWord: null, pdfPpt: null, pdfExcel: null,
     wordPdf: null, pptPdf: null, excelPdf: null, edit: null, pdfJpg: null, jpgPdf: [],
     sign: null, watermark: null, rotate: null, unlock: null, protect: null,
@@ -824,7 +929,137 @@ let files = {
 };
 
 // ============================================================
-// ALL TOOL IMPLEMENTATIONS
+// PDF READER & VERIFY FUNCTIONS
+// ============================================================
+function setVerifyStatus(type, message) {
+    const dot = document.getElementById('verifyDot');
+    const msg = document.getElementById('verifyMessage');
+    if (!dot || !msg) return;
+    dot.className = 'dot';
+    if (type === 'valid') dot.classList.add('valid');
+    else if (type === 'invalid') dot.classList.add('invalid');
+    else if (type === 'pending') dot.classList.add('pending');
+    msg.textContent = message;
+}
+
+function handleReaderFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+        showToast('Please select a valid PDF file.', 'error');
+        return;
+    }
+    files.reader = file;
+    files.readerRendered = false;
+    document.getElementById('readerFileName').textContent = file.name;
+    setVerifyStatus('neutral', `Loaded: ${file.name} — tap "Verify Signature" to check.`);
+    document.getElementById('verifySignatureBtn').disabled = false;
+    document.getElementById('downloadVerifiedBtn').disabled = false;
+    renderReaderPdf(file);
+}
+
+async function renderReaderPdf(file) {
+    const frame = document.getElementById('pdfViewerFrame');
+    frame.innerHTML = '<div class="pdf-viewer-placeholder"><i class="fas fa-spinner fa-spin"></i> Rendering PDF...</div>';
+    try {
+        const buf = await file.arrayBuffer();
+        files.readerBuffer = buf.slice(0); // store copy for verification
+        const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+        frame.innerHTML = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const vp = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = vp.width;
+            canvas.height = vp.height;
+            canvas.className = 'pdf-page-canvas';
+            frame.appendChild(canvas);
+            await page.render({ canvasContext: ctx, viewport: vp }).promise;
+        }
+        files.readerRendered = true;
+        setVerifyStatus('neutral', `✅ PDF loaded (${pdf.numPages} page${pdf.numPages > 1 ? 's' : ''}). Ready to verify.`);
+    } catch (err) {
+        console.error(err);
+        frame.innerHTML = `<div class="pdf-viewer-placeholder"><i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> Failed to render PDF: ${err.message}</div>`;
+        setVerifyStatus('invalid', 'Could not load PDF.');
+        document.getElementById('verifySignatureBtn').disabled = true;
+        document.getElementById('downloadVerifiedBtn').disabled = true;
+    }
+}
+
+async function verifyPdfSignature() {
+    if (!files.readerBuffer) {
+        showToast('Please load a PDF first.', 'error');
+        return;
+    }
+    const btn = document.getElementById('verifySignatureBtn');
+    btn.disabled = true;
+    setVerifyStatus('pending', '⏳ Scanning for digital signature markers...');
+
+    // Simulated verification delay
+    await new Promise(r => setTimeout(r, 1200));
+
+    try {
+        const decoder = new TextDecoder('latin1');
+        const raw = decoder.decode(files.readerBuffer);
+        const markers = [
+            '/Type /Sig', '/Type/Sig',
+            'adbe.pkcs7.detached', 'adbe.pkcs7.sha1',
+            'ETSI.CAdES.detached', 'ByteRange', 'Signature'
+        ];
+        const found = markers.filter(m => raw.includes(m));
+
+        const hasSigDict = raw.includes('/Type /Sig') || raw.includes('/Type/Sig');
+        const hasByteRange = raw.includes('ByteRange');
+        const hasAdbe = raw.includes('adbe.pkcs7') || raw.includes('ETSI.CAdES');
+
+        if (hasSigDict && hasByteRange) {
+            setVerifyStatus('valid', `✅ Digital signature found & verified (simulated). Markers: ${found.slice(0,3).join(', ')}`);
+            showToast('✅ Signature verified (simulated)', 'success');
+        } else if (hasSigDict || hasAdbe) {
+            setVerifyStatus('invalid', `⚠️ Signature marker present but incomplete (missing ByteRange).`);
+            showToast('Signature incomplete', 'error');
+        } else {
+            setVerifyStatus('invalid', `❌ No digital signature found in this PDF.`);
+            showToast('No digital signature detected', 'error');
+        }
+    } catch (err) {
+        console.error(err);
+        setVerifyStatus('invalid', 'Verification error: ' + err.message);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function downloadCurrentPdf() {
+    if (!files.readerBuffer) {
+        showToast('No PDF loaded.', 'error');
+        return;
+    }
+    const name = files.reader ? files.reader.name.replace(/\.pdf$/i, '') + '_verified.pdf' : 'document.pdf';
+    saveAs(new Blob([files.readerBuffer], { type: 'application/pdf' }), name);
+    showToast('✅ PDF downloaded', 'success');
+}
+
+function clearReader() {
+    files.reader = null;
+    files.readerBuffer = null;
+    files.readerRendered = false;
+    document.getElementById('readerFileName').textContent = 'No file selected';
+    document.getElementById('readerInput').value = '';
+    const frame = document.getElementById('pdfViewerFrame');
+    frame.innerHTML = `<div class="pdf-viewer-placeholder" id="pdfViewerPlaceholder">
+        <i class="fas fa-book-open"></i>
+        Loaded PDF pages will appear here.
+    </div>`;
+    setVerifyStatus('neutral', 'No PDF loaded');
+    document.getElementById('verifySignatureBtn').disabled = true;
+    document.getElementById('downloadVerifiedBtn').disabled = true;
+}
+
+// ============================================================
+// ALL OTHER TOOL IMPLEMENTATIONS (unchanged)
 // ============================================================
 
 // ---------- MERGE ----------
